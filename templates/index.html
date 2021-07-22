@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Golf Handicapper{% endblock %}
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container">
+		<div class="main-cta">
+			<div class="cta-top">
+				<h1>Track Your Scores</h1>
+				<p>Store your scores and find your handicap with ease!</p>
+			</div>
+			<div class="cta-buttons">
+				<a href="{{ url_for('create_account') }}" class="button">Get Started</a>
+				<a href="{{ url_for('login') }}" class="button">Login</a>
+			</div>
+			<div class="cta-after">
+				<p><a class="fancy-link" href="#learnMoreGoesHere">Learn more.</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+	
+</body>
+</html>

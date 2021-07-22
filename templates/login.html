@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Golf Handicapper | Login{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+	<div class="form-wrapper">
+		<div class="form">
+			<h1>Log in.</h1>
+			<form action="{{ url_for('login') }}" method="POST">
+				{{form.csrf_token}}
+				<div class="input-wrap">
+					{{form.username.label}}{{form.username}}
+				</div>
+				<div class="input-wrap">
+					{{form.password.label}}{{form.password}}
+				</div>
+				<div class="input-wrap">
+					<button type="submit">Submit</button>
+					<p>Don't have an account? <a class="fancy-link" href="{{ url_for('create_account') }}">Create one.</a></p>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock %}
+	
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Golf Handicapper | Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container">
+
+		<div class="profile">
+			<div class="box">
+				<h2>{{ first_name }} {{ last_name }}</h2>
+
+				<img class="avatar" src="/static/images/user_avatars/{{ avatar }}" alt="Profile picture">
+			</div>
+			<div class="stats box">
+				<h2>Scorecard.</h2>
+				<p>Your Handicap is <span class="highlight-text">{{ handicap }}!</span></p>
+				<p>You've played <span class="highlight-text">{{ total_rounds }}</span> total round(s)!</p>
+				<p>Member since <span class="highlight-text">{{ date }}</span></p>
+			</div>
+			<div class="box">
+				<h2>Options.</h2>
+				<a class="fancy-link" href="{{ url_for('add_round') }}">Add a Round</a>
+				<a class="fancy-link" href="#">Edit a Round</a>
+				<a class="fancy-link" href="#">View Leaderboard</a>
+			</div>
+		</div>
+		<div class="box">
+			<h2>Recent rounds.</h2>
+			<table>
+				<thead>
+					<tr>
+						<th class="mobile">Course</th>
+						<th class="hide-mobile">Rating</th>
+						<th class="hide-mobile">Slope</th>
+						<th class="mobile">Score (AGS)</th>
+						<th class="hide-mobile">Score Differential</th>
+						<th class="mobile">Date</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for round in rounds %}
+					<tr>
+						<td class="mobile">{{round['course']}}</td>
+						<td class="hide-mobile">{{round['rating']}}</td>
+						<td class="hide-mobile">{{round['slope']}}</td>
+						<td class="mobile">{{round['score']}}</td>
+						<td class="hide-mobile">{{round['score_differential']}}</td>
+						<td class="mobile">{{round['timestamp']}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
+	
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Golf Handicapper | Add Round{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+	<div class="form-wrapper">
+		<div class="form">
+			<h1>Add Round.</h1>
+			<form class="" action="{{ url_for('add_round') }}" method="POST">
+				{{form.csrf_token}}
+				<div class="input-wrap">
+					{{form.course}}
+				</div>
+				<div class="input-wrap">
+					{{form.rating}}
+				</div>
+				<div class="input-wrap">
+					{{form.slope}}
+				</div>
+				<div class="input-wrap">
+					{{form.score}}
+				</div>
+				<div class="input-wrap">
+					{{form.zipcode}}
+				</div>
+				<div class="input-wrap">
+					<button type="submit">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+
+{% endblock %}
+	
+</body>
+</html>

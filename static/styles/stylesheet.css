@@ -1,0 +1,420 @@
+:root {
+	--secondary-color: ;
+	--secondary-color: #ff6403; /* heading, button, link
+	  */
+	--hover-color: #ff640390;
+	--bg-primary-color: #9edb99;
+	--bg-secondary-color: #70c768;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	font-family: Ubuntu, sans-serif;
+	background: linear-gradient(to bottom right,
+		var(--bg-primary-color),
+		var(--bg-secondary-color));
+	/*background-image: url("../images/background.png");*/
+	color: #000;
+}
+
+h1 {
+	text-transform: uppercase;
+	color: #ff6403;
+	font-weight: 600;
+}
+
+table {
+	border-collapse: collapse;
+	border: 1px solid #999;
+}
+
+tr {
+	border: 1px solid #999;
+}
+
+td, th {
+	padding: 5px 10px;
+	text-align: center;
+	border: 1px solid #999;
+}
+
+tr:hover {
+	background-color: #ffffff20;
+	cursor: default;
+}
+
+
+/*--------------------*/
+/*      flashes       */
+/*--------------------*/
+
+.flashes {
+	list-style-type: none;
+	text-align: center;	
+	font-size: 16px;
+}
+
+.flashes > div {
+	width: 80%;
+	margin: auto;
+	padding: .5px;
+	border-radius: 20px;
+}
+
+.flashes .error {
+	background-color: #a9444250;
+	color: #fff;
+}
+
+.flashes .success {
+	background-color: #40724050;
+	color: #fff;
+}
+
+/*--------------------*/
+/*       links        */
+/*--------------------*/
+
+
+.fancy-link {
+	color: #ff6403;
+	font-weight: 600;
+	text-decoration: none;
+	position: relative;
+}
+
+.fancy-link::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 1.5px;
+	background: currentColor;
+
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: all 250ms ease-in;
+}
+
+.fancy-link:hover {
+	color: #ff640390;
+	transition: all 250ms ease-in;
+}
+
+.fancy-link:hover::after {
+	transform: scaleX(1.0);
+	color: #ff640390;
+}
+
+
+/*--------------------*/
+/*       forms        */
+/*--------------------*/
+
+.main {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	top: 0;
+}
+
+.form-wrapper {
+	width: 500px;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	background-color: #fff;
+	border-radius: 15px;
+	z-index: 10;
+}
+
+
+.form {
+	padding: 30px 40px 20px;
+	margin: 0px 40px;
+	position: relative;
+	display: flex;
+	flex-flow: column wrap;
+}
+
+.form > h1 {text-align: center;}
+
+.input-wrap {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: center;
+	margin-bottom: 1.5em;
+	color: #333;
+}
+
+.input-wrap p {
+	margin: auto;
+	padding-top: 1.5em;
+}
+
+label[for=avatar] {
+	color: #777777;
+	flex: 1;
+	font-size: 16px;
+	font-weight: normal;
+	padding: 4px;
+}
+
+input {
+	font-size: 16px;
+	font-weight: normal;
+	padding: 4px;
+	width: 100%;
+	border: none;
+	border-bottom: 2px solid #00000050;
+	transition: all 350ms ease;
+}
+
+input[type=file] {
+	border: none;
+	flex: 1;
+	color: #777777;
+}
+
+input:focus {
+	outline: none;
+	box-shadow: 0 1px 0 0 #ff640390;
+	border-color: #ff640390;
+}
+
+button {
+	padding: 15px 60px;
+	border-radius: 30px;
+	border: none;
+	color: #fff;
+	background-color: #ff6403;
+	font-weight: 600;
+	font-size: 16px;
+	font-family: Ubuntu, sans-serif;
+	margin: auto;
+	transition: all 250ms ease-in;
+}
+
+button:hover, .button:hover {
+	background-color: #ff640315;
+	color: #ff6403;
+	/*outline: 2px solid #ff6403;*/
+	box-shadow: 0 0 0 2px #ff6403;
+	cursor: pointer;
+}
+
+/*--------------------*/
+/*       navbar       */
+/*--------------------*/
+
+header {position: fixed; width: 100%; top: 0}
+
+.home {
+	top: 0;
+	left: 20px;
+	padding: 20px;
+	font-size: 2.5rem;
+	background-color: #00000090;
+	z-index: 10;
+}
+
+.home a {
+	color: #fff;
+	transition: all 250ms ease-in;
+}
+
+.home a + a { 
+	margin-left: 40px;
+}
+
+.home a:hover {
+	color: #ff6403
+}
+
+/*--------------------*/
+/*      sitewide      */
+/*--------------------*/
+
+.logo {
+	position: fixed;
+	bottom: 0;
+	right: 50px;
+	z-index: 0;
+}
+
+a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.flex-container {
+	display: flex;
+	flex-flow: column wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+a.button {
+	padding: 15px 60px;
+	border-radius: 30px;
+	border: none;
+	color: #fff;
+	background-color: #ff6403;
+	font-weight: 600;
+	font-size: 16px;
+	font-family: Ubuntu, sans-serif;
+	margin: auto;
+	text-decoration: none;
+	font-weight: bold;
+	text-align: center;
+	transition: all 250ms ease-in;
+}
+
+a.button:hover {
+	background-color: #ff640315;
+	color: #ff6403;
+	/*outline: 2px solid #ff6403;*/
+	box-shadow: 0 0 0 2px #ff6403;
+	cursor: pointer;
+}
+
+/*--------------------*/
+/*       home         */
+/*--------------------*/
+
+.main-cta {
+	font-size: 1.5rem;
+	max-width: 500px;
+	min-width: 250px;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	background-color: #fff;
+	border-radius: 15px;
+	padding: 30px 40px 20px;
+	margin: 0px 40px;
+	position: relative;
+	display: flex;
+	flex-flow: column wrap;
+}
+
+/*.main-cta + .main-cta {
+	margin-top: 25px;
+}
+
+.main-cta:first-child {
+	margin-top: 25vh;
+}*/
+
+.cta-buttons {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.cta-buttons > .button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.cta-after {
+	padding-top: 20px;
+	font-size: 1rem;
+	text-align: center;
+}
+
+
+/*--------------------*/
+/* account dashboard  */
+/*--------------------*/
+
+.profile {
+	flex: 2;
+	margin: 10px 0;
+	/*text-align: center;*/
+	display: flex;
+	justify-content: space-between;
+	flex-flow: row wrap;
+}
+
+.box {
+	display: flex;
+	flex: 1 1;
+	flex-flow: column wrap;
+	align-items: flex-start;
+	justify-content: center;
+	margin: 1em;
+	border-radius: 15px;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	background-color: #fff;
+}
+
+.box > * {
+	margin: 1em;
+}
+
+.box > h2 {
+	margin: 1em auto;
+}
+
+img.avatar {
+	max-width: 300px;
+	min-width: 250px;
+	margin: 1em 25px;
+	border-radius: 5%;
+}
+
+.round-table {
+	flex: 1;
+	align-self: center;
+	justify-content: space-around;
+}
+
+span.highlight-text {color: #ff6403; font-weight: bold;}
+
+@media only screen and (max-width: 900px) {
+	.hide-mobile {display: none;}
+
+	.main {
+		margin: 10px 50px;
+	}
+}
+
+@media only screen and (max-width: 600px) {
+	.form {
+		padding: 10px;
+		margin: 10px
+	}
+
+	.home {
+		font-size: 1.75rem;
+		display: flex;
+	}
+
+	.home a {
+		flex: 1;
+		margin: 0 !important;
+	}
+
+	.home a + a {
+		text-align: center;
+		flex: 1;
+	}
+
+	.main-cta {
+		padding: 20px;
+		margin: 20px;
+	}
+
+	.cta-buttons {
+		flex-flow: column wrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	input[type=file] {
+		flex: 2; 
+	}
+}

@@ -1,6 +1,5 @@
 import mysql.connector
 from mysql.connector import errorcode
-# import json
 
 # import db
 cnx = mysql.connector.connect(
@@ -10,36 +9,10 @@ cnx = mysql.connector.connect(
 	)
 cur = cnx.cursor()
 
-# TABLES = {}
-
-# TABLES['rounds'] = (
-# 	"""CREATE TABLE rounds (
-# 	ID INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-# 	user_id INT(10),
-# 	rating DECIMAL(5, 2) NOT NULL,
-# 	slope SMALLINT NOT NULL,
-# 	score SMALLINT NOT NULL,
-# 	score_differential SMALLINT NOT NULL,
-# 	course CHAR(100),
-# 	zip INT(5),
-# 	DATE_TIME TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)""")
-
-
-# for table_name in TABLES:
-# 	create_table = TABLES[table_name]
-# 	try:
-# 		print("Creating table {}: ".format(table_name), end='')
-# 		cur.execute(create_table)
-# 	except mysql.connector.Error as err:
-# 		if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-# 			print("Table already exists.")
-# 		else:
-# 			print(err.msg)
-# 	else:
-# 		print("Table {} created.".format(table_name))
-
 
 def get_round_data(form):
+	"""get round data from user form,
+	return data in a dict to be used by other functions"""
 	rating = form.rating.data
 	slope = form.slope.data
 	score = form.score.data
@@ -58,13 +31,14 @@ def get_round_data(form):
 
 
 def score_round(rating, slope, score):
+	"""used to find the score diff in add_round_record"""
 	score_differential = (score - rating) * 113 / slope
 
 	return score_differential
 
 
 def add_round_record(round_data, cur, cnx, user_id):
-
+	"""parse round data, write to database"""
 	user_id = user_id # here we will eventually get userid from the session
 	rating = float(round_data['rating'])
 	slope = float(round_data['slope'])
@@ -100,6 +74,24 @@ def get_total_rounds(cur, cnx, user_id):
 	return total_rounds
 
 
+def get_lowest_score(cur, cnx, user_id):
+	"""query database to get rounds for a specific user...
+	the result is used to feed the get_handicap function...
+	query will pull back 20 most recent rounds for user..."""
+
+	query = """SELECT * FROM rounds WHERE user_id = {} 
+		ORDER BY score ASC LIMIT 1""".format(user_id)
+	cur.execute(query)
+	data = cur.fetchone()
+
+	if data:
+		lowest_score = data[4]
+	else:
+		lowest_score = "N/A"
+
+	return lowest_score
+
+
 def get_rounds(cur, cnx, user_id):
 	"""query database to get rounds for a specific user...
 	the result is used to feed the get_handicap function...
@@ -112,6 +104,7 @@ def get_rounds(cur, cnx, user_id):
 
 	rounds = []
 
+	# loop through all rounds to creat dict for each round then add dict to list
 	for x in data:
 		this_round = {
 		'id': x[0],
@@ -122,7 +115,7 @@ def get_rounds(cur, cnx, user_id):
 		'score_differential': x[5],
 		'course': x[6],
 		'zipcode': x[7],
-		'timestamp': str(x[8]),
+		'timestamp': x[8].strftime("%B %d %Y"),
 		}
 
 		rounds.append(this_round)
@@ -174,9 +167,11 @@ def get_handicap(rounds):
 		# lowest 9
 		x=9
 	elif no_of_rounds >= 20:
+		# lowest 10
 		x=10
 
 	# sort score diff in ascending order, limit to x which was set above
+	# x lowest scores
 	# only append score diffs that will be used for calculate func
 	for score in sorted(score_differentials)[:x]: 
 		scores.append(score)

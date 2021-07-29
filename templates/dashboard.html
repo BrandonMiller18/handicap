@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}Golf Handicapper | Dashboard{% endblock %}
+{% block title %}The Golf Handicap | Dashboard{% endblock %}
+{% set active_page = 'account' %}
 
 {% block content %}
 
@@ -7,50 +8,88 @@
 	<div class="flex-container">
 
 		<div class="profile">
-			<div class="box">
-				<h2>{{ first_name }} {{ last_name }}</h2>
+			<div class="row">
+				<div class="box user">
+					{% if not first_name %}
+					<h2>{{ username }}</h2>
+					{% else %}
+					<h2>{{ first_name }} {{ last_name }}</h2>
+					{% endif %}
+					<div class="row">	
+						<img class="avatar" src="/static/images/user_avatars/{{ avatar }}" alt="Profile picture">
+						<div class="column">
+							<p>Username: <span class="username">{{ username }}</span></p>
+							<p>Email: <span class="username">{{ email }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="box options">
+					<h2>Options.</h2>
+					<a class="button" href="{{ url_for('add_round') }}">Add a Round</a>
+					<a class="fancy-link" href="#">Edit a Round</a>
+					<a class="fancy-link" href="#">View Leaderboard</a>
+					<a class="fancy-link" href="#">Edit Account</a>
+					<a class="fancy-link" href="{{ url_for('logout') }}">Logout</a>
+				</div>
+			</div>
+			<div class="box stats">
+				<div class="row title"><h2>Scorecard.</h2></div>
+				<div class="row">
+					<div class="stats-box handicap">
+						<h3>Handicap</h3>
+						<p>{{ handicap }}</p>
+					</div>
+					<div class="stats-box total-rounds">
+						<h3>Rounds Played</h3>
+						<p>{{ total_rounds }}</p>
+					</div>
+					<div class="stats-box lowest-score">
+						<h3>Lowest Score</h3>
+						<p>{{ lowest_score }}</p>
+					</div>
+					<div class="stats-box member-since">
+						<h3>Member Since</h3>
+						<p>{{ date }}</p>
+					</div>
+				</div>
 
-				<img class="avatar" src="/static/images/user_avatars/{{ avatar }}" alt="Profile picture">
+				<!-- <p>Your Handicap is <span class="highlight-text">{{ handicap }}!</span></p> -->
+				<!-- <p>You've played <span class="highlight-text">{{ total_rounds }}</span> total round(s)!</p> -->
+				<!-- <p>Member since <span class="highlight-text">{{ date }}</span></p> -->
 			</div>
-			<div class="stats box">
-				<h2>Scorecard.</h2>
-				<p>Your Handicap is <span class="highlight-text">{{ handicap }}!</span></p>
-				<p>You've played <span class="highlight-text">{{ total_rounds }}</span> total round(s)!</p>
-				<p>Member since <span class="highlight-text">{{ date }}</span></p>
-			</div>
-			<div class="box">
-				<h2>Options.</h2>
-				<a class="fancy-link" href="{{ url_for('add_round') }}">Add a Round</a>
-				<a class="fancy-link" href="#">Edit a Round</a>
-				<a class="fancy-link" href="#">View Leaderboard</a>
-			</div>
-		</div>
-		<div class="box">
-			<h2>Recent rounds.</h2>
-			<table>
-				<thead>
-					<tr>
-						<th class="mobile">Course</th>
-						<th class="hide-mobile">Rating</th>
-						<th class="hide-mobile">Slope</th>
-						<th class="mobile">Score (AGS)</th>
-						<th class="hide-mobile">Score Differential</th>
-						<th class="mobile">Date</th>
-					</tr>
-				</thead>
-				<tbody>
+			<div class="box rounds">
+				<h2>Recent rounds.</h2>
+				<div class="row head">
+					<p class="round-table mobile">Course</p>
+					<p class="round-table hide-mobile">Rating</p>
+					<p class="round-table hide-mobile">Slope</p>
+					<p class="round-table mobile">Score</p>
+					<p class="round-table hide-mobile">Score Differential</p>
+					<p class="round-table mobile">Date</p>
+				</div>
+				{% if rounds %}
 					{% for round in rounds %}
-					<tr>
-						<td class="mobile">{{round['course']}}</td>
-						<td class="hide-mobile">{{round['rating']}}</td>
-						<td class="hide-mobile">{{round['slope']}}</td>
-						<td class="mobile">{{round['score']}}</td>
-						<td class="hide-mobile">{{round['score_differential']}}</td>
-						<td class="mobile">{{round['timestamp']}}</td>
-					</tr>
+					<div class="row table">	
+						<p class="round-table mobile">
+							{% if round['course'] == "" %}
+							Not Available
+							{% else %}
+							{{round['course']}}
+							{% endif %}
+						</p>
+						<p class="round-table hide-mobile">{{round['rating']}}</p>
+						<p class="round-table hide-mobile">{{round['slope']}}</p>
+						<p class="round-table mobile">{{round['score']}}</p>
+						<p class="round-table hide-mobile">{{round['score_differential']}}</p>
+						<p class="round-table mobile">{{round['timestamp']}}</p>
+					</div>
 					{% endfor %}
-				</tbody>
-			</table>
+				{% else %}
+					<div class="row table">
+						<p><i>No rounds have been played!</i></p>
+					</div>
+				{% endif %}
+			</div>
 		</div>
 	</div>
 

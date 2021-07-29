@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | Blog{% endblock %}
+{% block description %}The Golf Handicap blog, where you can find valuable information on golf gear, training tips, and more. Check back often for hot deals on new items!{% endblock %}
+{% set active_page = "blog" %}
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container blog">
+		<div class="blog-home box">
+			<div class="blog-top">
+				<h1>Blog.</h1>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum consequuntur qui eligendi modi atque et voluptates laborum ullam id deserunt est quibusdam laboriosam, neque nemo alias iste, autem. Sequi, aliquid. Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Doloribus, minus veniam, ipsam dolorem at, suscipit aut voluptate, quibusdam illum cupiditate nostrum provident voluptates adipisci quis sequi aliquid esse? Esse, nulla?	</p>
+			</div>
+			<div class="blog-bottom">
+				<h2>Recent Posts.</h2>
+
+				{% for blog in recent_blogs %}
+				<div class="post">
+					<h3><a class="fancy-link" href="/blog/{{ blog.slug }}">{{blog.title}}</a></h3>
+					<p class="blog-description">{{blog.meta_description}}</p>
+				</div>
+				{% endfor %}
+
+
+
+<!-- 				<div class="post">
+					<h3><a class="fancy-link" href="#linktopost">What is a Handicap?</a></h3>
+					<p class="blog-description">Golf handicaps. What do they mean, how do you calculate it, and should you really care?</p>
+				</div>
+				<div class="post">
+					<h3><a class="fancy-link" href="#linktopost">What is AGS?</a></h3>
+					<p class="blog-description">Meta description about the post will go here. Click to read more!</p>
+				</div>
+				<div class="post">
+					<h3><a class="fancy-link" href="#linktopost">The Mental Game.</a></h3>
+					<p class="blog-description">Meta description about the post will go here. Click to read more!</p>
+				</div>
+				<div class="post">
+					<h3><a class="fancy-link" href="#linktopost">Best New Drivers!?</a></h3>
+					<p class="blog-description">Meta description about the post will go here. Click to read more!</p>
+				</div> -->
+				<div class="cta-buttons">
+						<a href="{{ url_for('all_blogs') }}" class="button">View All</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | {{blog.meta_title}}{% endblock %}
+{% block description %}{{ blog.meta_description }} {% endblock %}
+{% set active_page = "blog_post" %}
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container">
+		<div class="box blog-post">
+			<h1>{{ blog.title }}</h1>
+			<img class="hero" src="{{ url_for('static', filename='images/blog_images/')}}{{blog.hero_image if blog.hero_image else 'default.png'}}" alt="">
+			<div class="row">
+				<p><strong>By:</strong> {{ blog.author }}</p>
+				<p><strong>Date posted:</strong> {{ blog.date_posted.strftime('%m-%d-%Y') }}</p>
+			</div>
+			<p>{{ blog.content | safe}}</p>
+		</div>
+	</div>
+</div>
+
+<div class="all-blogs-button">
+	<a href="{{ url_for('all_blogs') }}#{{ blog.id }}" class="button">View All</a>
+</div>
+
+
+{% endblock %}

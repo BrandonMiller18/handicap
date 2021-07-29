@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | All Blogs{% endblock %}
+{% set active_page = "all_blogs" %}
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container blog">
+		{% for blog in blogs %}
+
+		<div id="{{blog.id}}" class="box blog">
+			<h2>{{blog.title}}</h2>
+			<p class="blog-date">Date posted: {{blog.date_posted.strftime('%m-%d-%Y')}}</p>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>{{blog.preview_content}}</p>
+			</div>
+			<a href="/blog/{{ blog.slug }}" class="button blog">Read More</a>
+		</div>
+
+		{% endfor %}
+
+
+<!-- 		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div>
+		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div>
+		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div>
+		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div>
+		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div>
+		<div class="box blog">
+			<h2>Blog Headline</h2>
+			<div class="blog-preview">
+				<img src="../static/images/user_avatars/default.png" alt="">
+				<p>Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Modi repellat nisi reprehenderit, exercitationem dignissimos voluptatum molestiae cum dicta tenetur ducimus ipsa ex quos enim magni ea iure explicabo totam perferendis?</p>
+			</div>
+			<a href="#viewBlog" class="button blog">Read More</a>
+		</div> -->
+	</div>
+</div>
+
+
+{% endblock %}

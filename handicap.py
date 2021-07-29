@@ -4,8 +4,9 @@ from mysql.connector import errorcode
 
 # import db
 cnx = mysql.connector.connect(
-	host = "localhost",
-	user = "root",
+	host = os.environ.get("DB_HOST"),
+	user = os.environ.get("DB_USER"),
+	password = os.environ.get("DB_PASSWORD"),
 	database = os.environ.get("SCHEMA_NAME"),
 	)
 cur = cnx.cursor()

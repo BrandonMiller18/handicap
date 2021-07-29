@@ -46,6 +46,26 @@ class users(UserMixin, db.Model):
 	date_created = db.Column(db.DateTime, unique=True, default=datetime.now)
 
 
+class rounds(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer)
+	rating = db.Column(db.Numeric(precision=8, scale=2), unique=False)
+	slope = db.Column(db.Integer)
+	score = db.Column(db.Integer)
+	score_differential = db.Column(db.Numeric(precision=8, scale=2))
+	course = db.Column(db.String(255))
+	zipcode = db.Column(db.Integer)
+	time_stamp = db.Column(db.DateTime, default=datetime.now)
+
+
+class handicaps(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer)
+	handicap = db.Column(db.Numeric(precision=8, scale=2))
+	total_rounds = db.Column(db.Integer)
+	last_update = db.Column(db.DateTime, default=datetime.now)
+
+
 class blogpost(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255))
@@ -56,12 +76,14 @@ class blogpost(db.Model):
 	meta_description = db.Column(db.String(255))
 	slug = db.Column(db.String(255)) # url
 	hero_image = db.Column(db.String(255))
-	date_posted = db.Column(db.DateTime, unique=True, default=datetime.now)
+	date_posted = db.Column(db.DateTime, default=datetime.now)
 
 
 db.create_all()
 
 admin.add_view(ModelView(users, db.session))
+admin.add_view(ModelView(rounds, db.session))
+admin.add_view(ModelView(handicaps, db.session))
 admin.add_view(ModelView(blogpost, db.session))
 
 
@@ -170,17 +192,31 @@ def create_account():
 		return redirect(url_for('dashboard'))
 
 	elif form.validate_on_submit(): # valid form, POST
+		## CHECK FOR EXISTING USERS BEFORE DOING ANYTHING ELSE ##
+
+		user_with_username = users.query.filter_by(username=form.username.data).first()
+		user_with_email = users.query.filter_by(email=form.email.data).first()
+
+		if user_with_username:
+			flash("Username already taken.", "error")
+			return render_template("createaccount.html", form=form)
+		if user_with_email:
+			flash("User with this email already exists.", "error")
+			return render_template("createaccount.html", form=form)
+
+
 		if request.files['avatar']: # if user submitted a profile image
 			# TODO - check image size and validate
 			file = request.files['avatar']
 			if file and allowed_file(file.filename):
-				filename = secure_filename(str(form.username)) # set filename to username
+				filename = secure_filename(str(form.username.data)) # set filename to username
 				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		else: # if user did not upload image, set image to default image
 			filename = 'default.png'
 
+
 		try: # create the account
-			create_new_account(form, filename, cur, cnx)
+			create_new_account(form, filename, db)
 		except mysql.connector.errors.IntegrityError:
 			# error is raised if user or email exists, redirect to login
 			# flash("Username or email already exists, please login.", 'error')
@@ -254,25 +290,25 @@ def dashboard():
 	user_id = request.cookies.get('uid')
 	user = users.query.filter_by(id=user_id).first()
 
-	rounds = get_rounds(cur, cnx, user_id)
+	rounds = get_rounds(db, user_id)
 
 	if rounds:
 		handicap = round(get_handicap(rounds), 1)
-		total_rounds = get_total_rounds(cur, cnx, user_id)
+		total_rounds = get_total_rounds(db, user_id)
 	else:
 		handicap = 0
 		total_rounds = 0
 
 	if not 'updates' in session:	
 		# update handicap in the handicaps table for leaderboard
-		update_handicap(handicap, total_rounds, user_id, cur, cnx)
+		update_handicap(handicap, total_rounds, user_id, db)
 		session['updates'] = 1
 	elif session['updates'] > 5:
 		"""limit number of times a person can update handicaps table in a session"""
 		flash("Leaderboard updated too many times. Log out and back in to reset.", "error")
 	else:
 		# update handicap in the handicaps table for leaderboard
-		update_handicap(handicap, total_rounds, user_id, cur, cnx)
+		update_handicap(handicap, total_rounds, user_id, db)
 		session['updates'] += 1
 
 
@@ -283,7 +319,7 @@ def dashboard():
 	email = user.email
 	date = user.date_created
 	date = date.strftime("%A, %B %d %Y")
-	lowest_score = get_lowest_score(cur, cnx, user_id)
+	lowest_score = get_lowest_score(db, user_id)
 	if handicap == 0:
 		handicap = "N/A"
 
@@ -308,7 +344,7 @@ def add_round():
 		# calculate score differential and insert into table
 		round_data = get_round_data(form)
 		user_id = request.cookies.get('uid')
-		add_round_record(round_data, cur, cnx, int(user_id))
+		add_round_record(round_data, db, int(user_id))
 
 		return redirect(url_for("dashboard"))
 	else:

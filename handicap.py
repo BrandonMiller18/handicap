@@ -1,15 +1,18 @@
-import os
-import mysql.connector
-from mysql.connector import errorcode
+from datetime import datetime
+from decimal import * 
 
-# import db
-cnx = mysql.connector.connect(
-	host = os.environ.get("DB_HOST"),
-	user = os.environ.get("DB_USER"),
-	password = os.environ.get("DB_PASSWORD"),
-	database = os.environ.get("SCHEMA_NAME"),
-	)
-cur = cnx.cursor()
+# import os
+# import mysql.connector
+# from mysql.connector import errorcode
+
+# # import db
+# cnx = mysql.connector.connect(
+# 	host = os.environ.get("DB_HOST"),
+# 	user = os.environ.get("DB_USER"),
+# 	password = os.environ.get("DB_PASSWORD"),
+# 	database = os.environ.get("SCHEMA_NAME"),
+# 	)
+# cur = cnx.cursor()
 
 
 def get_round_data(form):
@@ -39,7 +42,7 @@ def score_round(rating, slope, score):
 	return score_differential
 
 
-def add_round_record(round_data, cur, cnx, user_id):
+def add_round_record(round_data, db, user_id):
 	"""parse round data, write to database"""
 	user_id = user_id # here we will eventually get userid from the session
 	rating = float(round_data['rating'])
@@ -48,15 +51,29 @@ def add_round_record(round_data, cur, cnx, user_id):
 	course = round_data['course']
 	zipcode = round_data['zipcode']
 	score_differential = score_round(rating, slope, score)
+	timestamp = str(datetime.now())
 
-	round_values = (user_id, rating, slope, score, score_differential, course, zipcode)
+	query = f"""INSERT INTO rounds (
+			user_id,
+			rating,
+			slope,
+			score,
+			score_differential,
+			course,
+			zipcode,
+			time_stamp)
+		VALUES {
+			user_id,
+			rating,
+			slope,
+			score,
+			score_differential,
+			course,
+			zipcode,
+			timestamp}"""
 
-	add_round = ("""INSERT INTO rounds 
-		(user_id, rating, slope, score,	score_differential, course, zip)
-		VALUES (%s, %s, %s, %s, %s, %s, %s)""")
-
-	cur.execute(add_round, round_values)
-	cnx.commit()
+	db.session.execute(query)
+	db.session.commit()
 
 ##	#	#	#	#	#	#	#	##
 #--------------------------------#
@@ -64,27 +81,28 @@ def add_round_record(round_data, cur, cnx, user_id):
 #--------------------------------#
 ##	#	#	#	#	#	#	#	##
 
-def get_total_rounds(cur, cnx, user_id):
+def get_total_rounds(db, user_id):
 	"""query database to get total number of rounds to display in dashboard"""
 
 	query = """SELECT * FROM rounds WHERE user_id = {}""".format(user_id)
-	cur.execute(query)
-	data = cur.fetchall()
+	data = db.session.execute(query)
 
-	total_rounds = len(data)
+	total_rounds = 0
+
+	for r in data:
+		total_rounds += 1
 
 	return total_rounds
 
 
-def get_lowest_score(cur, cnx, user_id):
+def get_lowest_score(db, user_id):
 	"""query database to get rounds for a specific user...
 	the result is used to feed the get_handicap function...
 	query will pull back 20 most recent rounds for user..."""
 
 	query = """SELECT * FROM rounds WHERE user_id = {} 
 		ORDER BY score ASC LIMIT 1""".format(user_id)
-	cur.execute(query)
-	data = cur.fetchone()
+	data = db.session.execute(query).fetchone()
 
 	if data:
 		lowest_score = data[4]
@@ -94,15 +112,16 @@ def get_lowest_score(cur, cnx, user_id):
 	return lowest_score
 
 
-def get_rounds(cur, cnx, user_id):
+def get_rounds(db, user_id):
 	"""query database to get rounds for a specific user...
 	the result is used to feed the get_handicap function...
 	query will pull back 20 most recent rounds for user..."""
 
 	query = """SELECT * FROM rounds WHERE user_id = {} 
-		ORDER BY date_time DESC LIMIT 20""".format(user_id)
-	cur.execute(query)
-	data = cur.fetchall()
+		ORDER BY time_stamp DESC LIMIT 20""".format(user_id)
+	
+	data = db.session.execute(query)
+
 
 	rounds = []
 
@@ -137,7 +156,7 @@ def get_handicap(rounds):
 	no_of_rounds = len(rounds)
 
 	for x in rounds:
-		score_differentials.append(x['score_differential'])
+		score_differentials.append(float(x['score_differential']))
 	
 	if no_of_rounds <= 6:
 		# lowest one round

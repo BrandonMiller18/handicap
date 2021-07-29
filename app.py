@@ -59,7 +59,7 @@ class blogpost(db.Model):
 	date_posted = db.Column(db.DateTime, unique=True, default=datetime.now)
 
 
-db.create_all()
+# db.create_all()
 
 admin.add_view(ModelView(users, db.session))
 admin.add_view(ModelView(blogpost, db.session))

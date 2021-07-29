@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 from mysql.connector import errorcode
 
@@ -5,7 +6,7 @@ from mysql.connector import errorcode
 cnx = mysql.connector.connect(
 	host = "localhost",
 	user = "root",
-	database = "golf_handicap",
+	database = os.environ.get("SCHEMA_NAME"),
 	)
 cur = cnx.cursor()
 

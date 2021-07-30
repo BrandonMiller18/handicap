@@ -14,14 +14,14 @@ def create_new_account(form, filename, db):
 
 	# TODO:
 	# - way to handle when an email, username already exists.
-	
+
 	db.session.execute(query)
 	db.session.commit()
 
 
 def update_handicap(handicap, total_rounds, user_id, db):
 	query = "SELECT * FROM handicaps WHERE user_id = {}".format(user_id)
-	resp = db.session.execute(query)
+	resp = db.session.execute(query).fetchone()
 
 	timestamp = str(datetime.now())
 

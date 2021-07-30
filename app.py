@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
-from flask import Flask, render_template, redirect, url_for, request, session, flash, make_response
+from flask import Flask, render_template, redirect, url_for, request, session, flash, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
@@ -43,6 +43,7 @@ class users(UserMixin, db.Model):
 	password = db.Column(db.String(20), unique=False)
 	email = db.Column(db.String(25), unique=True)
 	avatar = db.Column(db.String(255))
+	is_admin = db.Column(db.Boolean, default=False)
 	date_created = db.Column(db.DateTime, unique=True, default=datetime.now)
 
 
@@ -79,12 +80,20 @@ class blogpost(db.Model):
 	date_posted = db.Column(db.DateTime, default=datetime.now)
 
 
+class Controller(ModelView): # to only allow access to admin to is_admin users
+	def is_accessible(self):
+		if current_user.is_admin == True:
+			return current_user.is_authenticated
+		else:
+			return abort(404)
+
+
 db.create_all()
 
-admin.add_view(ModelView(users, db.session))
-admin.add_view(ModelView(rounds, db.session))
-admin.add_view(ModelView(handicaps, db.session))
-admin.add_view(ModelView(blogpost, db.session))
+admin.add_view(Controller(users, db.session))
+admin.add_view(Controller(rounds, db.session))
+admin.add_view(Controller(handicaps, db.session))
+admin.add_view(Controller(blogpost, db.session))
 
 
 

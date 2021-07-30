@@ -1,7 +1,15 @@
 {% extends "base.html" %}
-{% block title %}The Golf Handicap | {{blog.meta_title}}{% endblock %}
+{% block title %}{{blog.title}} | The Golf Handicap{% endblock %}
 {% block description %}{{ blog.meta_description }} {% endblock %}
 {% set active_page = "blog_post" %}
+
+{% block open_graph %}
+	<meta property="og:title" content="{{ blog.title }} | The Golf Handicap">
+	<meta property="og:description" content="{{ blog.meta_description }}">
+	<!-- change og image to blog card when that field becomes available in db -->
+	<meta property="og:image" content="{{ url_for('static', filename='images/blog_images/') }}{{ blog.hero_image if blog.hero_image else 'default.png' }}">
+	<meta property="twitter:card" content="{{ url_for('static', filename='images/blog_images/') }}{{ blog.hero_image if blog.hero_image else 'default.png' }}">
+{% endblock %}
 
 {% block content %}
 

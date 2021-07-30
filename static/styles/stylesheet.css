@@ -462,12 +462,12 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 
 .blog-top {
 	flex: 1;
-	min-width: 300px;
+	min-width: 250px;
 }
 
 .blog-bottom {
 	margin: .5em auto;
-	min-width: 300px;
+	min-width: 250px;
 	max-width: 500px;
 }
 
@@ -566,7 +566,7 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 	.hide-mobile {display: none;}
 
 	.main {
-		margin: 10px 50px;
+		margin: 0px 10px;
 	}
 }
 
@@ -636,6 +636,6 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 
 @media only screen and (max-width: 400px) {
 	.main {
-		padding-top: 50px;
+		/*padding-top: 50px;*/
 	}
 }

@@ -4,6 +4,14 @@
 	<meta charset="UTF-8">
 	<title>{% block title %}{% endblock %}</title>
 	<meta name="Description" content="{% block description %}{% endblock %}">
+	{% if active_page == 'blog_post' %}
+		{% block open_graph %}{% endblock %}
+	{% else %}
+		<meta property="og:title" content="The Golf Handicap | Track Your Scores">
+		<meta property="og:description" content="Track your scores, find your handicap, compete against your friends. Try it today!">
+		<meta property="og:image" content="{{ url_for('static', filename='images/favicon.png') }}">
+		<meta property="twitter:card" content="{{ url_for('static', filename='images/favicon.png') }}">
+	{% endif %}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/stylesheet.css') }}">

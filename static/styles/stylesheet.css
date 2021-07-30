@@ -467,7 +467,7 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 
 .blog-bottom {
 	margin: .5em auto;
-	min-width: 250px;
+	min-width: 25px;
 	max-width: 500px;
 }
 
@@ -541,7 +541,7 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 }
 
 .blog-post .hero {
-	width: 95%;
+	width: 100%;
 	min-width: 250px;
 	margin: auto;
 }
@@ -557,6 +557,8 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 	left: 20px;
 	z-index: 5;
 }
+
+.all-blogs-button > .button:hover {background-color: #fff;}
 
 /*--------------------*/
 /*    media queries   */
@@ -614,6 +616,10 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 		margin: 0 5px;
 	}
 
+	.box.blog-post {
+		margin-top: 2em;
+	}
+
 	input[type=file] {
 		flex: 2; 
 	}
@@ -629,13 +635,7 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 	.options > .button {
 		margin: .75em auto;
 		padding: 15px 40px;
-		min-width: 200px;
+		min-width: 150px;
 }
 
-}
-
-@media only screen and (max-width: 400px) {
-	.main {
-		/*padding-top: 50px;*/
-	}
 }

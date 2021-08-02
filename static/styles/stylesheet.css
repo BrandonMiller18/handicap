@@ -101,7 +101,7 @@ h1 {
 	align-items: center;
 	min-height: 100vh;
 	top: 0;
-	/*padding-top: 50px;*/
+	padding-top: 50px;
 }
 
 .form-wrapper {
@@ -199,7 +199,7 @@ button:hover, .button:hover {
 /*       navbar       */
 /*--------------------*/
 
-header {position: fixed; width: 100%; top: 0; z-index: 50;}
+header {position: fixed; width: 100%; top: 50px; z-index: 50;}
 
 .home {
 	top: 0;
@@ -287,6 +287,22 @@ footer .socials {
 
 footer .socials:hover {
 	color: var(--hover-color);
+}
+
+/*--------------------*/
+/*       ribbon       */
+/*--------------------*/
+
+.ribbon {
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	min-width: 325px;
+	height: 50px;
+	background-color: #000;
+	z-index: 50;
+	text-align: center;
+	color: #fff;
 }
 
 /*--------------------*/

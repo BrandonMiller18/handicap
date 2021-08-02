@@ -27,7 +27,7 @@
 					<h2>Options.</h2>
 					<a class="button" href="{{ url_for('add_round') }}">Add a Round</a>
 					<a class="fancy-link" href="#">Edit a Round</a>
-					<a class="fancy-link" href="#">View Leaderboard</a>
+					<a class="fancy-link" href="{{ url_for('leaderboard', sort='handicap') }}">View Leaderboard</a>
 					<a class="fancy-link" href="#">Edit Account</a>
 					<a class="fancy-link" href="{{ url_for('logout') }}">Logout</a>
 				</div>

@@ -63,6 +63,7 @@ class handicaps(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer)
 	handicap = db.Column(db.Numeric(precision=8, scale=2))
+	lowest_score = db.Column(db.Integer)
 	total_rounds = db.Column(db.Integer)
 	last_update = db.Column(db.DateTime, default=datetime.now)
 
@@ -304,20 +305,22 @@ def dashboard():
 	if rounds:
 		handicap = round(get_handicap(rounds), 1)
 		total_rounds = get_total_rounds(db, user_id)
+		lowest_score = get_lowest_score(db, user_id)
 	else:
 		handicap = 0
 		total_rounds = 0
+		lowest_score = get_lowest_score(db, user_id)
 
 	if not 'updates' in session:	
 		# update handicap in the handicaps table for leaderboard
-		update_handicap(handicap, total_rounds, user_id, db)
+		update_handicap(handicap, lowest_score, total_rounds, user_id, db)
 		session['updates'] = 1
 	elif session['updates'] > 5:
 		"""limit number of times a person can update handicaps table in a session"""
 		flash("Leaderboard updated too many times. Log out and back in to reset.", "error")
 	else:
 		# update handicap in the handicaps table for leaderboard
-		update_handicap(handicap, total_rounds, user_id, db)
+		update_handicap(handicap, lowest_score, total_rounds, user_id, db)
 		session['updates'] += 1
 
 
@@ -328,7 +331,6 @@ def dashboard():
 	email = user.email
 	date = user.date_created
 	date = date.strftime("%A, %B %d %Y")
-	lowest_score = get_lowest_score(db, user_id)
 	if handicap == 0:
 		handicap = "N/A"
 
@@ -361,7 +363,48 @@ def add_round():
 		return render_template("addround.html", form=form)
 
 
+@app.route('/leaderboard')
+# @login_required
+def leaderboard():
+	sort = request.args.get("sort")
+	if sort == 'handicap':
+		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			FROM handicaps
+			INNER JOIN users ON handicaps.user_id=users.id
+			WHERE handicaps.total_rounds > 0
+			ORDER BY handicap;"""
+	elif sort == 'rounds':
+		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			FROM handicaps
+			INNER JOIN users ON handicaps.user_id=users.id
+			WHERE handicaps.total_rounds > 0
+			ORDER BY total_rounds DESC;"""
+	elif sort == 'score':
+		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			FROM handicaps
+			INNER JOIN users ON handicaps.user_id=users.id
+			WHERE handicaps.total_rounds > 0
+			ORDER BY lowest_score;"""
+	else:
+		return render_template("leaderboard.html",
+			sort=sort)
 
+	leaderboard = db.session.execute(query)
+	return render_template("leaderboard.html",
+		leaderboard=leaderboard,
+		sort=sort)
+
+
+@app.route('/email-signup', methods=["POST"])
+def email_signup():
+	if request.method == "POST":
+
+		flash("Thank you for signing up!", "success")
+		url = request.referrer
+		# return redirect(url)
+		return form.email.data
+	else:
+		return abort(404)
 
 if __name__ == '__main__':
 	app.run() 

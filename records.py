@@ -19,22 +19,22 @@ def create_new_account(form, filename, db):
 	db.session.commit()
 
 
-def update_handicap(handicap, total_rounds, user_id, db):
+def update_handicap(handicap, lowest_score, total_rounds, user_id, db):
 	query = "SELECT * FROM handicaps WHERE user_id = {}".format(user_id)
 	resp = db.session.execute(query).fetchone()
 
 	timestamp = str(datetime.now())
 
 	if not resp:
-		query = f"""INSERT INTO handicaps (user_id, handicap, total_rounds, last_update)
-			VALUES {user_id, handicap, total_rounds, timestamp}"""
+		query = f"""INSERT INTO handicaps (user_id, handicap, lowest_score, total_rounds, last_update)
+			VALUES {user_id, handicap, lowest_score, total_rounds, timestamp}"""
 		db.session.execute(query)
 		db.session.commit()
 
 		return True
 
 	if resp:
-		query = f"""UPDATE handicaps SET handicap = '{handicap}', last_update = '{timestamp}', total_rounds = '{total_rounds}' WHERE user_id = {user_id}"""
+		query = f"""UPDATE handicaps SET handicap = '{handicap}', last_update = '{timestamp}', lowest_score = '{lowest_score}',total_rounds = '{total_rounds}' WHERE user_id = {user_id}"""
 		db.session.execute(query)
 		db.session.commit()
 

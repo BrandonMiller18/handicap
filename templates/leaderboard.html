@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | Home{% endblock %}
+{% set active_page = "leaderboard" %}
+
+
+
+{% block content %}
+
+<div class="main">
+	<div class="flex-container">
+		<div class="row">
+			<form>
+				<div class="input-wrap">
+					<label for="sort">Select leaderboard.</label>
+					<select name="sort" id="sort" onchange="if(this.value != '') { this.form.submit(); }">
+						<option value="">Select one...</option>
+						<option value="handicap">Handicaps</option>
+						<option value="score">Lowest Score</option>
+						<option value="rounds">Total Rounds</option>
+					</select>
+				</div>
+<!-- 				<div class="input-wrap">
+					<button type="submit">Go!</button>
+				</div> -->
+			</form>
+		</div>
+		<div class="row">
+			<div class="box rounds leaderboard">
+				{% if sort == 'handicap' %}
+				<h2>Leaderboard.</h2>
+				{% elif sort == 'score' %}
+				<h2>Lowest Scores.</h2>
+				{% elif sort == 'rounds' %}
+				<h2>Most rounds.</h2>
+				{% endif %}
+				<div class="row head">
+					{% if leaderboard %}
+					<p class="round-table user">Username</p>
+					{% endif %}
+					{% if sort == 'handicap' %}
+					<p class="round-table">Handicap</p>
+					{% elif sort == 'score' %}
+					<p class="round-table">Lowest Score</p>
+					{% elif sort == 'rounds' %}
+					<p class="round-table">Rounds Played</p>
+					{% endif %}
+				</div>
+				{% if leaderboard %}
+					{% for user in leaderboard %}
+					<div class="row table leaderboard">	
+						<p class="round-table user">{{user['username']}}</p>
+						{% if sort == 'handicap' %}
+						<p class="round-table">{{ user['handicap'] | round }}</p>
+						{% elif sort == 'score' %}
+						<p class="round-table">{{ user['lowest_score'] }}</p>
+						{% elif sort == 'rounds' %}
+						<p class="round-table">{{user['total_rounds']}}</p>
+						{% endif %}
+					</div>
+					{% endfor %}
+				{% else %}
+					<div class="row table">
+						<p><i>No leaders in this clubhouse!</i></p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

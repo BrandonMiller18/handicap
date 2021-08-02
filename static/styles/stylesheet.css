@@ -1,5 +1,5 @@
 :root {
-	--secondary-color: #333;
+	--secondary-color: #222;
 	--primary-color: #ff6403; /* heading, button, link
 	  */
 	--hover-color: #ff640390;
@@ -229,6 +229,67 @@ header {position: fixed; width: 100%; top: 0; z-index: 50;}
 }
 
 /*--------------------*/
+/*       footer       */
+/*--------------------*/
+
+footer {
+	display: flex;
+	flex-flow: row wrap;
+	position: absolute;
+	justify-content: center;
+	align-content: flex-start;
+	width: 100%;
+	padding: 20px 0;
+	min-height: 250px;
+	z-index: 1;
+	color: #fff;
+	background-color: var(--secondary-color);
+}
+
+footer .column {
+	flex: 1;
+	margin: 1em 15px;
+	padding: 0 10px;
+	min-width: 250px;
+	border-left: 2px solid #ffffff50;
+}
+
+footer button:hover {
+	background-color: #fff;
+}
+
+footer a {
+	width: min-content;
+	min-width: 250px;
+	margin: 1em 15px;
+}
+
+footer input {
+	background-color: #fff;
+	width: 250px;
+	margin: auto;
+	border-radius: 16px;
+	height: 25px;
+	padding: 5px 20px;
+}
+
+footer input:focus {background-color: #fff;}
+
+footer .socials {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-size: 4em;
+	transition: all 250ms ease-in;
+	min-width: min-content;
+	margin: auto;
+}
+
+
+footer .socials:hover {
+	color: var(--hover-color);
+}
+
+/*--------------------*/
 /*      sitewide      */
 /*--------------------*/
 
@@ -408,6 +469,7 @@ img.avatar {
 	width: 80%;
 	padding: 0 10px;
 	border-bottom: 1px solid var(--primary-color);
+	flex-flow: row nowrap;
 }
 
 .rounds > .row.head {
@@ -444,9 +506,26 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 .stats-box.lowest-score {background-color: #202c1f;}
 .stats-box.member-since {background-color: #10160f;}
 
+
+/*--------------------*/
+/*    leaderboard     */
+/*--------------------*/
+
+.box.leaderboard {
+	width: 650px;
+	min-width: 300px;
+}
+
+.row.leaderboard {justify-content: flex-start;}
+
+.round-table.user {flex: 2;}
+ 
+label {padding-right: 4px;}
+
 /*--------------------*/
 /*       blog         */
 /*--------------------*/
+
 
 .flex-container.blog {
 	flex-flow: row wrap;
@@ -636,6 +715,10 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 		margin: .75em auto;
 		padding: 15px 40px;
 		min-width: 150px;
-}
+	}
+
+	.box.leaderboard {
+		width: 95vw;
+	}
 
 }

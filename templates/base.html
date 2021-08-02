@@ -18,7 +18,7 @@
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet"> 
 	<script>
 		
@@ -63,4 +63,40 @@
 	{% block content %}{% endblock %}
 
 </body>
+
+<footer>
+	<div class="column">
+		<h2>Email Signup</h2>
+		<p>Sign up for our email newsletters and never miss a great tip, review, or deal!</p>
+		<form action="{{ url_for('email_signup') }}" method="POST">
+			<div class="input-wrap">
+				<input type="text" name="email" placeholder="Email">
+			</div>
+			<div class="input-wrap">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
+	</div>
+	<div class="column">
+		<h3>TGH Info</h3>
+		<a href="" class="fancy-link">About Us</a>
+		<a href="" class="fancy-link">Privacy Policy</a>
+		<a href="" class="fancy-link">lorem ipsum</a>
+	</div>
+	<div class="column">
+		<h3>TGH on Social Media</h3>
+		<div class="row">
+			<a href="https://www.instagram.com/thegolfhandicap/" class="socials">
+				<i class="fa fa-instagram" aria-hidden="true"></i>
+			</a>
+			<a href="#" class="socials">
+				<i class="fa fa-facebook-official" aria-hidden="true"></i>
+			</a>
+			<a href="#" class="socials">
+				<i class="fa fa-twitter" aria-hidden="true"></i>
+			</a>
+		</div>
+	</div>
+</footer>
+
 </html>

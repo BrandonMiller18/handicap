@@ -78,6 +78,7 @@ class blogpost(db.Model):
 	meta_description = db.Column(db.String(255))
 	slug = db.Column(db.String(255)) # url
 	hero_image = db.Column(db.String(255))
+	preview_image = db.Column(db.String(255))
 	date_posted = db.Column(db.DateTime, default=datetime.now)
 
 

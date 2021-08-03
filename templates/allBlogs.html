@@ -6,14 +6,14 @@
 
 <div class="main">
 	<div class="flex-container blog">
-		
+
 		{% for blog in blogs %}
 
 		<div id="{{blog.id}}" class="box blog">
 			<h2>{{blog.title}}</h2>
 			<p class="blog-date">Date posted: {{blog.date_posted.strftime('%m-%d-%Y')}}</p>
 			<div class="blog-preview">
-				<img src="../static/images/user_avatars/default.png" alt="">
+				<img src="{{ url_for('static', filename='images/blog_images/') }}{{ blog.preview_image if blog.preview_image else 'default.png' }}" alt="">
 				<p>{{blog.preview_content}}</p>
 			</div>
 			<a href="/blog/{{ blog.slug }}" class="button blog">Read More</a>

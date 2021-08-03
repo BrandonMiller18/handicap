@@ -10,7 +10,7 @@
 		<div class="blog-home box">
 			<div class="blog-top">
 				<h1>Blog.</h1>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum consequuntur qui eligendi modi atque et voluptates laborum ullam id deserunt est quibusdam laboriosam, neque nemo alias iste, autem. Sequi, aliquid. Lorem ipsum, dolor sit amet consectetur adipisicing, elit. Doloribus, minus veniam, ipsam dolorem at, suscipit aut voluptate, quibusdam illum cupiditate nostrum provident voluptates adipisci quis sequi aliquid esse? Esse, nulla?	</p>
+				<p>Welcome to The Golf Handicap blog! Here you will find content surrounding all things golf. From expert tips and tricks, cool gear, gadgets and reviews, all the way to website news - TGH has you covered. Subscribe to our email newsletter so you never miss a beat!</p>
 			</div>
 			<div class="blog-bottom">
 				<h2>Recent Posts.</h2>
@@ -18,7 +18,7 @@
 				{% for blog in recent_blogs %}
 				<div class="post">
 					<h3><a class="fancy-link" href="/blog/{{ blog.slug }}">{{blog.title}}</a></h3>
-					<p class="blog-description">{{blog.meta_description}}</p>
+					<p class="blog-description">{{blog.preview_content}}</p>
 				</div>
 				{% endfor %}
 

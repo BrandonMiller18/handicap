@@ -26,9 +26,9 @@
 				<div class="box options">
 					<h2>Options.</h2>
 					<a class="button" href="{{ url_for('add_round') }}">Add a Round</a>
-					<a class="fancy-link" href="#">Edit a Round</a>
 					<a class="fancy-link" href="{{ url_for('leaderboard', sort='handicap') }}">View Leaderboard</a>
 					<a class="fancy-link" href="#">Edit Account</a>
+					<a class="fancy-link" href="#">Create Group</a>
 					<a class="fancy-link" href="{{ url_for('logout') }}">Logout</a>
 				</div>
 			</div>
@@ -57,37 +57,41 @@
 				<!-- <p>You've played <span class="highlight-text">{{ total_rounds }}</span> total round(s)!</p> -->
 				<!-- <p>Member since <span class="highlight-text">{{ date }}</span></p> -->
 			</div>
+
+
 			<div class="box rounds">
 				<h2>Recent rounds.</h2>
-				<div class="row head">
-					<p class="round-table mobile">Course</p>
-					<p class="round-table hide-mobile">Rating</p>
-					<p class="round-table hide-mobile">Slope</p>
-					<p class="round-table mobile">Score</p>
-					<p class="round-table hide-mobile">Score Differential</p>
-					<p class="round-table mobile">Date</p>
-				</div>
 				{% if rounds %}
-					{% for round in rounds %}
-					<div class="row table">	
-						<p class="round-table mobile">
-							{% if round['course'] == "" %}
-							Not Available
-							{% else %}
-							{{round['course']}}
-							{% endif %}
-						</p>
-						<p class="round-table hide-mobile">{{round['rating']}}</p>
-						<p class="round-table hide-mobile">{{round['slope']}}</p>
-						<p class="round-table mobile">{{round['score']}}</p>
-						<p class="round-table hide-mobile">{{round['score_differential']}}</p>
-						<p class="round-table mobile">{{round['timestamp']}}</p>
-					</div>
-					{% endfor %}
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Course</th>
+							<th class="hide-mobile">Rating</th>
+							<th class="hide-mobile">Slope</th>
+							<th>Score</th>
+							<th>Score Differential</th>
+							<th class="hide-mobile">Date</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						{% for round in rounds %}
+						<tr>
+							<td>{{ round['course'] if round['course'] else 'Not Available' }}</td>
+							<td class="hide-mobile">{{ round['rating'] }}</td>
+							<td class="hide-mobile">{{ round['slope'] }}</td>
+							<td>{{ round['score'] }}</td>
+							<td>{{ round['score_differential'] }}</td>
+							<td class="hide-mobile">{{ round['timestamp'] }}</td>
+							<td class="edit-round"><a href="{{ url_for('edit_round', round_id=round['id']) }}"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 				{% else %}
-					<div class="row table">
-						<p><i>No rounds have been played!</i></p>
-					</div>
+				<div>
+					<p>No rounds played!</p>
+				</div>
 				{% endif %}
 			</div>
 		</div>

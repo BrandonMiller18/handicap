@@ -33,36 +33,43 @@
 				{% elif sort == 'rounds' %}
 				<h2>Most rounds.</h2>
 				{% endif %}
-				<div class="row head">
-					{% if leaderboard %}
-					<p class="round-table user">Username</p>
-					{% endif %}
-					{% if sort == 'handicap' %}
-					<p class="round-table">Handicap</p>
-					{% elif sort == 'score' %}
-					<p class="round-table">Lowest Score</p>
-					{% elif sort == 'rounds' %}
-					<p class="round-table">Rounds Played</p>
-					{% endif %}
-				</div>
+
+				<div class="row">
 				{% if leaderboard %}
-					{% for user in leaderboard %}
-					<div class="row table leaderboard">	
-						<p class="round-table user">{{user['username']}}</p>
-						{% if sort == 'handicap' %}
-						<p class="round-table">{{ user['handicap'] | round }}</p>
-						{% elif sort == 'score' %}
-						<p class="round-table">{{ user['lowest_score'] }}</p>
-						{% elif sort == 'rounds' %}
-						<p class="round-table">{{user['total_rounds']}}</p>
-						{% endif %}
-					</div>
-					{% endfor %}
+				<table class="table leaderboard">
+					<thead>
+						<tr>
+							<th>Username</th>
+							{% if sort == 'handicap' %}
+							<th>Handicap</th>
+							{% elif sort == 'score' %}
+							<th>Lowest Score</th>
+							{% elif sort == 'rounds' %}
+							<th>Rounds Played</th>
+							{% endif %}
+						</tr>
+					</thead>
+					<tbody>
+						{% for user in leaderboard %}
+						<tr>
+							<td>{{ user['username'] }}</td>
+							{% if sort == 'handicap' %}
+							<td>{{ user['handicap'] | round }}</td>
+							{% elif sort == 'score' %}
+							<td>{{ user['lowest_score'] }}</td>
+							{% elif sort == 'rounds' %}
+							<td>{{user['total_rounds']}}</td>
+							{% endif %}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 				{% else %}
-					<div class="row table">
-						<p><i>No leaders in this clubhouse!</i></p>
-					</div>
+				<div>
+					<p>No leaders in this clubhouse!</p>
+				</div>
 				{% endif %}
+				</div>
 			</div>
 		</div>
 	</div>

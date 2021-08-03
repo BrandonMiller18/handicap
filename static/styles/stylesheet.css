@@ -467,39 +467,38 @@ a.button:hover {
 
 img.avatar {
 	width: 250px;
-	max-height: 250px;
+	max-height: 200px;
 	margin: 1em;
 	border-radius: 15px;
 	box-shadow: 1px 0.5px 2px var(--secondary-color);
 }
 
-.round-table {
+/*.round-table {
 	flex: 1;
 	align-self: center;
-	justify-content: space-around;
-}
+}*/
 
-.rounds > .row {
+/*.rounds .row {
 	margin: 0 auto;
 	width: 80%;
 	padding: 0 10px;
 	border-bottom: 1px solid var(--primary-color);
 	flex-flow: row nowrap;
-}
+}*/
 
-.rounds > .row.head {
+/*.rounds .row.head {
 	border-width: 4px;
 	font-weight: 600;
 }
-
-.row.table:hover {
+*/
+/*.row.table:hover {
 	background-color: rgba(0, 0, 0, 0.05);
 	border-radius: 20px;
-}
+}*/
 
 span.highlight-text {color: #ff6403; font-weight: bold;}
 
-.stats > .row {
+.stats .row {
 	justify-content: space-around;
 }
 
@@ -521,6 +520,51 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 .stats-box.lowest-score {background-color: #202c1f;}
 .stats-box.member-since {background-color: #10160f;}
 
+/*TESTING ROUNDS IN <table> ELEMENT*/
+
+.table {
+	min-width: 250px;
+	margin: auto;
+}
+
+table {border-collapse: collapse;}
+
+tr {
+	border-bottom: 1px solid var(--primary-color);
+	transition: all 250ms ease-in;
+	height: min-content;
+}
+
+thead tr {
+	border-width: 4px;
+}
+
+tbody tr:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+	border-radius: 20px;
+}
+
+td, th {
+	padding: 8px;
+	max-width: 250px;
+	color: #000;
+	text-align: center;
+}
+
+td:first-child {
+	text-align: left;
+}
+
+tr th {border-width: 4px;}
+
+.edit-round a {
+	color: #000;
+	padding: 10px;
+	font-size: 1.25rem;
+}
+
+/*END TESTING*/
+
 
 /*--------------------*/
 /*    leaderboard     */
@@ -536,7 +580,10 @@ span.highlight-text {color: #ff6403; font-weight: bold;}
 	min-width: 300px;
 }
 
-.row.leaderboard {justify-content: flex-start;}
+.table.leaderboard {
+	width: 100%;
+	margin: 0 40px;
+}
 
 .round-table.user {flex: 2;}
  
@@ -664,7 +711,7 @@ label {padding-right: 4px;}
 /*--------------------*/
 
 @media only screen and (max-width: 900px) {
-	.hide-mobile {display: none;}
+	
 
 	.main {
 		margin: 0px 10px;
@@ -675,6 +722,8 @@ label {padding-right: 4px;}
 	.flex-container {
 		margin-top: 40px
 	}
+
+	.hide-mobile {display: none;}
 
 	.form {
 		padding: 10px;
@@ -739,6 +788,10 @@ label {padding-right: 4px;}
 
 	.box.leaderboard {
 		width: 95vw;
+	}
+
+	.rtable {
+		margin: auto 20px;
 	}
 
 }

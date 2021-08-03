@@ -84,10 +84,13 @@ class blogpost(db.Model):
 
 class Controller(ModelView): # to only allow access to admin to is_admin users
 	def is_accessible(self):
-		if current_user.is_admin == True:
-			return current_user.is_authenticated
+		if current_user.is_authenticated:		
+			if current_user.is_admin == True:
+				return current_user.is_authenticated
+			else:
+				return abort(403)
 		else:
-			return abort(404)
+			return abort(403)
 
 
 db.create_all()
@@ -398,6 +401,18 @@ def email_signup():
 		return redirect(url)
 	else:
 		return abort(404)
+
+
+@app.errorhandler(401)
+def unauthorized_error(self):
+	flash("Please login to continue.", "error")
+	# url = request.referrer
+	# resp = make_response(redirect(url), 401)
+	return redirect(url_for("login"))
+
+@app.errorhandler(403)
+def forbidden_error(self):
+	return redirect(url_for('index'))
 
 if __name__ == '__main__':
 	app.run() 

@@ -155,37 +155,6 @@ def individual_blog(slug):
 	return render_template("blogpost.html", blog=blog)
 
 
-### DELETED ROUTE FOR ADDING BLOG POST AS THIS IS DONE IN THE FLASK ADMIN NOW
-# @app.route("/blog/add-post", methods=["GET", "POST"])
-# def add_post():
-# 	form = postForm()
-
-# 	if form.validate_on_submit():
-# 		post = blogpost(
-# 			title=form.title.data,
-# 			content=form.content.data,
-# 			preview_content=form.preview_content.data,
-# 			author=form.author.data,
-# 			meta_title=form.meta_title.data,
-# 			meta_description=form.meta_description.data,
-# 			slug=form.slug.data,
-# 			)
-# 		form.title.data = ''
-# 		form.content.data = ''
-# 		form.preview_content.data = ''
-# 		form.author.data = ''
-# 		form.meta_title.data = ''
-# 		form.meta_description.data = ''
-# 		form.slug.data = ''
-
-# 		db.session.add(post)
-# 		db.session.commit()
-
-# 		flash("Post submitted!", "success")
-
-# 	return render_template("addpost.html", form=form)
-
-
 
 ##################
 #				 #

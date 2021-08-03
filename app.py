@@ -333,6 +333,30 @@ def add_round():
 		return render_template("addround.html", form=form)
 
 
+
+@app.route('/account/edit-round/<round_id>', methods=["POST", "GET"])
+@login_required
+def edit_round(round_id):
+	form = editRound()
+	uid = int(request.cookies.get('uid'))
+	this_round = rounds.query.filter_by(id=round_id).first()
+
+	if uid != int(this_round.user_id): # stop a-hole from messing with other users rounds
+		return abort(403)
+
+	if form.validate_on_submit():
+		round_data = get_round_data(form)
+		update_round_record(round_data, db, round_id)
+		flash("Round updated successfully!", "success")
+
+		return redirect(url_for('dashboard'))
+	else:
+		return render_template("editround.html", 
+			form=form,
+			this_round=this_round,
+			round_id=round_id)
+
+
 @app.route('/leaderboard')
 # @login_required
 def leaderboard():
@@ -371,8 +395,7 @@ def email_signup():
 
 		flash("Thank you for signing up!", "success")
 		url = request.referrer
-		# return redirect(url)
-		return form.email.data
+		return redirect(url)
 	else:
 		return abort(404)
 

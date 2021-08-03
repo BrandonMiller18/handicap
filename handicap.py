@@ -75,6 +75,31 @@ def add_round_record(round_data, db, user_id):
 	db.session.execute(query)
 	db.session.commit()
 
+
+def update_round_record(round_data, db, round_id):
+	"""parse round data, write to database"""
+	rating = float(round_data['rating'])
+	slope = float(round_data['slope'])
+	score = float(round_data['score'])
+	course = round_data['course']
+	zipcode = round_data['zipcode']
+	score_differential = score_round(rating, slope, score)
+	timestamp = str(datetime.now())
+
+	query = f"""UPDATE rounds
+			SET
+			rating = {rating},
+			slope = {slope},
+			score = {score},
+			score_differential = {score_differential},
+			course = '{course}',
+			zipcode = {zipcode},
+			time_stamp = '{timestamp}'
+			WHERE id = {round_id};"""
+
+	db.session.execute(query)
+	db.session.commit()
+
 ##	#	#	#	#	#	#	#	##
 #--------------------------------#
 #!Get data from DB and calculate!#

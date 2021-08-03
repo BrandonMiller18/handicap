@@ -9,32 +9,6 @@ from wtforms.widgets import TextArea
 #				 #
 ##################
 
-class postForm(FlaskForm):
-	title = StringField("Title",
-		render_kw={"Placeholder": "Title"},
-		validators=[DataRequired()])
-	content = StringField("Content",
-		render_kw={"Placeholder": "Content"},
-		validators=[DataRequired()],
-		widget=TextArea())
-	preview_content = StringField("Preview Content",
-		render_kw={"Placeholder": "Preview Content"},
-		validators=[DataRequired()],
-		widget=TextArea())
-	author = StringField("Author",
-		render_kw={"Placeholder": "Author"},
-		validators=[DataRequired()])
-	meta_title = StringField("Meta Title",
-		render_kw={"Placeholder": "Meta Title"},
-		validators=[DataRequired()])
-	meta_description = StringField("Meta Description",
-		render_kw={"Placeholder": "Meta Description"},
-		validators=[DataRequired()])
-	slug = StringField("Slug",
-		render_kw={"Placeholder": "Slug"},
-		validators=[DataRequired()])
-
-
 class createAccount(FlaskForm):
 	first_name = StringField('First Name',
 		render_kw={"Placeholder": "First Name"})
@@ -58,6 +32,22 @@ class loginForm(FlaskForm):
 
 
 class roundForm(FlaskForm):
+	course = StringField('Course', render_kw={"Placeholder": "Course Name"})
+	rating = FloatField('Course Rating',
+		render_kw={"Placeholder": "Course Rating"},
+		validators=[DataRequired(message='Course Rating is required')])
+	slope = IntegerField('Slope',
+		render_kw={"Placeholder": "Slope"},
+		validators=[DataRequired(message='Slope is required')])
+	score = IntegerField('Score',
+		render_kw={"Placeholder": "Score (AGS)"},
+		validators=[DataRequired(message='Score is required')])
+	zipcode = StringField('Zipcode',
+		render_kw={"Placeholder": "Zipcode"},
+		validators=[Length(min=0, max=5, message='Zipcode must be 5 digits.')])
+
+
+class editRound(FlaskForm):
 	course = StringField('Course', render_kw={"Placeholder": "Course Name"})
 	rating = FloatField('Course Rating',
 		render_kw={"Placeholder": "Course Rating"},

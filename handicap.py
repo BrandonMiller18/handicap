@@ -1,20 +1,6 @@
 from datetime import datetime
 from decimal import * 
 
-# import os
-# import mysql.connector
-# from mysql.connector import errorcode
-
-# # import db
-# cnx = mysql.connector.connect(
-# 	host = os.environ.get("DB_HOST"),
-# 	user = os.environ.get("DB_USER"),
-# 	password = os.environ.get("DB_PASSWORD"),
-# 	database = os.environ.get("SCHEMA_NAME"),
-# 	)
-# cur = cnx.cursor()
-
-
 def get_round_data(form):
 	"""get round data from user form,
 	return data in a dict to be used by other functions"""

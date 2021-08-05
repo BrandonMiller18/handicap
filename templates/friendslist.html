@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | Friends List{% endblock %}
+{% set active_page = "friends_list" %}
+
+
+
+{% block content %}
+
+<div class="main leaderboard">
+	<div class="flex-container">
+		<div class="row">
+			<div class="box rounds leaderboard">
+				<h2>Friends.</h2>
+				<div class="row">
+				{% if friends %}
+				<table class="table leaderboard">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th class="hide-mobile">Handicap</th>
+							<th class="hide-mobile">Lowest Score</th>
+							<th class="hide-mobile">Total Rounds</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for friend in friends %}
+						<tr>
+							<td>{{ friend['friend_username'] }}</td>
+							<td class="hide-mobile">{{ friend['handicap'] }}</td>
+							<td class="hide-mobile">{{ friend['lowest_score'] }}</td>
+							<td class="hide-mobile">{{ friend['total_rounds'] }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				{% else %}
+				<div>
+					<p>No Friends Yet! <a class="fancy-link" href="{{ url_for('add_friend') }}">Add One!</a></p>
+				</div>
+				{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

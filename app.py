@@ -82,6 +82,13 @@ class blogpost(db.Model):
 	date_posted = db.Column(db.DateTime, default=datetime.now)
 
 
+class friends(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer)
+	friend_user_id = db.Column(db.Integer)
+	approved = db.Column(db.Boolean, default=False)
+
+
 class Controller(ModelView): # to only allow access to admin to is_admin users
 	def is_accessible(self):
 		if current_user.is_authenticated:		
@@ -290,11 +297,17 @@ def dashboard():
 		session['updates'] = 1
 	elif session['updates'] > 5:
 		"""limit number of times a person can update handicaps table in a session"""
-		flash("Leaderboard updated too many times. Log out and back in to reset.", "error")
+		pass
 	else:
 		# update handicap in the handicaps table for leaderboard
 		update_handicap(handicap, lowest_score, total_rounds, user_id, db)
 		session['updates'] += 1
+
+	friend_list = friends.query.filter_by(user_id=user_id)
+	friend_count = 0
+	
+	for friend in friend_list:
+		friend_count += 1
 
 
 	avatar = user.avatar
@@ -317,7 +330,8 @@ def dashboard():
 		total_rounds=total_rounds,
 		lowest_score=lowest_score,
 		date=date,
-		rounds=rounds)
+		rounds=rounds,
+		friend_count=friend_count)
 
 
 @app.route('/account/add-round', methods=["GET", "POST"])
@@ -376,6 +390,69 @@ def delete_round(round_id):
 		return redirect(url_for('dashboard'))
 
 
+@app.route('/account/add-friend', methods=["POST", "GET"])
+@login_required
+def add_friend():
+	form = addFriend()
+	uid = int(request.cookies.get('uid')) 
+
+	if form.validate_on_submit():
+		friend_name = form.username.data
+		friend = users.query.filter_by(username=friend_name).first()
+		if not friend:
+			flash("User does not exist.", "error")
+			return render_template('addfriend.html',
+				form=form)
+
+		elif friend:
+			friend_id = friend.id
+
+			if friend_id == uid:
+				flash("You can't be friends with yourself, weirdo.", "error")
+				return render_template('addfriend.html',
+					form=form)
+
+			query = f"SELECT friend_user_id FROM friends WHERE user_id = {uid}"
+			res = db.session.execute(query)
+			friend_id_list = []
+			for friend in res:
+				fid = friend['friend_user_id']
+				friend_id_list.append(fid)
+
+			print(friend_id_list, flush=True)
+			
+			if friend_id in friend_id_list:
+				flash("Already friends with this user!", "error")
+				return render_template('addfriend.html',
+				form=form)
+
+			query = f"""INSERT INTO friends (user_id, friend_user_id)
+				VALUES ({uid}, {friend_id})"""
+			db.session.execute(query)
+			db.session.commit()
+			flash("Friend added.", "success")
+
+			return redirect(url_for('dashboard'))
+
+	return render_template('addfriend.html',
+		form=form)
+
+
+@app.route('/account/friends')
+@login_required
+def friend_list():
+	uid = int(request.cookies.get('uid')) 
+	query = f"""SELECT users.username as friend_username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+		FROM friends
+		JOIN users ON friends.friend_user_id=users.id
+		JOIN handicaps ON friends.friend_user_id=handicaps.user_id
+		WHERE friends.user_id = {uid}"""
+	friends = db.session.execute(query)
+
+	return render_template('friendslist.html',
+		friends=friends)
+
+
 @app.route('/leaderboard')
 # @login_required
 def leaderboard():
@@ -417,6 +494,9 @@ def email_signup():
 		return redirect(url)
 	else:
 		return abort(404)
+
+
+
 
 
 @app.errorhandler(401)

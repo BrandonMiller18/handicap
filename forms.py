@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, IntegerField, PasswordField, FileField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, EqualTo
 from wtforms.widgets import TextArea
 
 ##################
@@ -20,6 +20,12 @@ class createAccount(FlaskForm):
 	password = PasswordField('Password',
 		render_kw={"Placeholder": "Password"},
 		validators=[DataRequired(message='Must enter password.')])
+	confirm_password = PasswordField('Confirm Password',
+		render_kw={"Placeholder": "Repeat Password"},
+		validators=[
+			DataRequired(message='Must enter password.'),
+			EqualTo('password', message="Passwords must match.")
+		])
 	email = StringField('Email',
 		render_kw={"Placeholder": "Email", "type": "email"},
 		validators=[DataRequired(message='Must enter email.')])
@@ -61,3 +67,8 @@ class editRound(FlaskForm):
 	zipcode = StringField('Zipcode',
 		render_kw={"Placeholder": "Zipcode"},
 		validators=[Length(min=0, max=5, message='Zipcode must be 5 digits.')])
+
+
+class addFriend(FlaskForm):
+	username = StringField('Friend Name', validators=[DataRequired()],
+		render_kw={"Placeholder": "Friend's TGH Username"})

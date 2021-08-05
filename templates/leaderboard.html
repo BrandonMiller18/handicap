@@ -69,6 +69,13 @@
 					<p>No leaders in this clubhouse!</p>
 				</div>
 				{% endif %}
+
+				{% if type == 'all' %}
+				<a class="fancy-link" href="{{ url_for('leaderboard', leaderboard_type='friends') }}">View Friends Only</a>
+				{% elif type == 'friends' %}
+				<a class="fancy-link" href="{{ url_for('leaderboard', leaderboard_type='all') }}">View All Leaders</a>
+				{% endif %}
+
 				</div>
 			</div>
 		</div>

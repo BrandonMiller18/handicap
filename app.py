@@ -453,36 +453,68 @@ def friend_list():
 		friends=friends)
 
 
-@app.route('/leaderboard')
+@app.route('/leaderboard/<leaderboard_type>')
 # @login_required
-def leaderboard():
+def leaderboard(leaderboard_type):
 	sort = request.args.get("sort")
-	if sort == 'handicap':
-		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
-			FROM handicaps
-			INNER JOIN users ON handicaps.user_id=users.id
-			WHERE handicaps.total_rounds > 0
-			ORDER BY handicap;"""
-	elif sort == 'rounds':
-		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
-			FROM handicaps
-			INNER JOIN users ON handicaps.user_id=users.id
-			WHERE handicaps.total_rounds > 0
-			ORDER BY total_rounds DESC;"""
-	elif sort == 'score':
-		query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
-			FROM handicaps
-			INNER JOIN users ON handicaps.user_id=users.id
-			WHERE handicaps.total_rounds > 0
-			ORDER BY lowest_score;"""
-	else:
-		return render_template("leaderboard.html",
-			sort=sort)
+	if not sort:
+		sort = 'handicap'
+	if leaderboard_type == 'all':
+		if sort == 'handicap':
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+				FROM handicaps
+				INNER JOIN users ON handicaps.user_id=users.id
+				WHERE handicaps.total_rounds > 0
+				ORDER BY handicap;"""
+		elif sort == 'rounds':
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+				FROM handicaps
+				INNER JOIN users ON handicaps.user_id=users.id
+				WHERE handicaps.total_rounds > 0
+				ORDER BY total_rounds DESC;"""
+		elif sort == 'score':
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+				FROM handicaps
+				INNER JOIN users ON handicaps.user_id=users.id
+				WHERE handicaps.total_rounds > 0
+				ORDER BY lowest_score;"""
+		else:
+			return render_template("leaderboard.html",
+				sort=sort)
+
+	if leaderboard_type == 'friends':
+		uid = int(request.cookies.get('uid'))
+		if sort == 'handicap':
+			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+				FROM friends
+				JOIN users ON friends.friend_user_id=users.id
+				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
+				WHERE friends.user_id = {uid}
+				ORDER BY handicaps.handicap;"""
+		elif sort == 'rounds':
+			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+				FROM friends
+				JOIN users ON friends.friend_user_id=users.id
+				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
+				WHERE friends.user_id = {uid}
+				ORDER BY handicaps.total_rounds DESC;"""
+		elif sort == 'score':
+			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+				FROM friends
+				JOIN users ON friends.friend_user_id=users.id
+				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
+				WHERE friends.user_id = {uid}
+				ORDER BY handicaps.lowest_score;"""
+		else:
+			return render_template("leaderboard.html",
+				sort=sort)
+
 
 	leaderboard = db.session.execute(query)
 	return render_template("leaderboard.html",
 		leaderboard=leaderboard,
-		sort=sort)
+		sort=sort,
+		type=leaderboard_type)
 
 
 @app.route('/email-signup', methods=["POST"])

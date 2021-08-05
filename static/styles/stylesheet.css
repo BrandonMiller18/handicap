@@ -344,7 +344,7 @@ footer {
 	align-content: flex-start;
 	width: 100%;
 	padding: 20px 0;
-	min-height: 250px;
+	min-height: 200px;
 	z-index: 1;
 	color: #fff;
 	background-color: var(--secondary-color);
@@ -358,19 +358,25 @@ footer .column {
 	border-left: 2px solid #ffffff50;
 }
 
+
 footer button:hover {
 	background-color: #fff;
 }
 
 footer a {
-	width: min-content;
-	min-width: 250px;
+	color: #fff;
+	text-decoration: none;
 	margin: 1em 15px;
+	transition: all 250ms ease-in;
+}
+
+footer a:hover {
+	color: var(--primary-color);
 }
 
 footer input {
 	background-color: #fff;
-	width: 250px;
+	width: 200px;
 	margin: auto;
 	border-radius: 16px;
 	height: 25px;
@@ -379,18 +385,23 @@ footer input {
 
 footer input:focus {background-color: #fff;}
 
+footer button {
+	padding: 12.5px 20px;
+	border-radius: 30px;
+}
+
 footer .socials {
-	color: var(--primary-color);
+	color: #fff;
 	text-decoration: none;
 	font-size: 4em;
-	transition: all 250ms ease-in;
 	min-width: min-content;
 	margin: auto;
+	transition: all 250ms ease-in;
 }
 
 
 footer .socials:hover {
-	color: var(--hover-color);
+	color: var(--primary-color);
 }
 
 

@@ -360,6 +360,22 @@ def edit_round(round_id):
 			round_id=round_id)
 
 
+@app.route('/account/delete-round/<round_id>', methods=["POST", "GET"])
+@login_required
+def delete_round(round_id):
+	uid = int(request.cookies.get('uid'))
+	this_round = rounds.query.filter_by(id=round_id).first()
+
+	if uid != int(this_round.user_id): # stop a-hole from messing with other users rounds
+		return abort(403)
+
+	else:
+		query = f"DELETE FROM rounds WHERE id = {round_id}"
+		db.session.execute(query)
+		db.session.commit()
+		return redirect(url_for('dashboard'))
+
+
 @app.route('/leaderboard')
 # @login_required
 def leaderboard():
@@ -406,12 +422,11 @@ def email_signup():
 @app.errorhandler(401)
 def unauthorized_error(self):
 	flash("Please login to continue.", "error")
-	# url = request.referrer
-	# resp = make_response(redirect(url), 401)
 	return redirect(url_for("login"))
 
 @app.errorhandler(403)
 def forbidden_error(self):
+	flash("Action not allowed.", "error")
 	return redirect(url_for('index'))
 
 if __name__ == '__main__':

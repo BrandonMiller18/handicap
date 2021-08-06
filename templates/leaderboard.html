@@ -54,7 +54,7 @@
 						<tr>
 							<td>{{ user['username'] }}</td>
 							{% if sort == 'handicap' %}
-							<td>{{ user['handicap'] | round }}</td>
+							<td>{{ user['handicap'] | round(1) }}</td>
 							{% elif sort == 'score' %}
 							<td>{{ user['lowest_score'] }}</td>
 							{% elif sort == 'rounds' %}

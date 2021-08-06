@@ -10,7 +10,6 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from handicap import *
-from records import *
 from forms import *
 
 app = Flask(__name__)

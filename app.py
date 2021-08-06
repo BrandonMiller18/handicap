@@ -418,8 +418,6 @@ def add_friend():
 			for friend in res:
 				fid = friend['friend_user_id']
 				friend_id_list.append(fid)
-
-			print(friend_id_list, flush=True)
 			
 			if friend_id in friend_id_list:
 				flash("Already friends with this user!", "error")

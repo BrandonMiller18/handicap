@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
-
+import bcrypt
 from flask import Flask, render_template, redirect, url_for, request, session, flash, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
@@ -40,7 +40,7 @@ class users(UserMixin, db.Model):
 	first_name = db.Column(db.String(20), unique=False)
 	last_name = db.Column(db.String(20), unique=False)
 	username = db.Column(db.String(20), unique=True)
-	password = db.Column(db.String(20), unique=False)
+	password = db.Column(db.Text, unique=False)
 	email = db.Column(db.String(25), unique=True)
 	avatar = db.Column(db.String(255))
 	is_admin = db.Column(db.Boolean, default=False)
@@ -184,8 +184,15 @@ def create_account():
 	elif form.validate_on_submit(): # valid form, POST
 		## CHECK FOR EXISTING USERS BEFORE DOING ANYTHING ELSE ##
 
-		user_with_username = users.query.filter_by(username=form.username.data).first()
-		user_with_email = users.query.filter_by(email=form.email.data).first()
+		first_name = form.first_name.data
+		last_name = form.last_name.data
+		username = form.username.data
+		password = form.password.data
+		email = form.email.data
+		timestamp = str(datetime.now())
+
+		user_with_username = users.query.filter_by(username=username).first()
+		user_with_email = users.query.filter_by(email=email).first()
 
 		if user_with_username:
 			flash("Username already taken.", "error")
@@ -204,17 +211,28 @@ def create_account():
 		else: # if user did not upload image, set image to default image
 			filename = 'default.png'
 
+		
+		avatar = filename
+		hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
 		try: # create the account
-			create_new_account(form, filename, db)
-		except mysql.connector.errors.IntegrityError:
-			# error is raised if user or email exists, redirect to login
-			# flash("Username or email already exists, please login.", 'error')
-			return redirect(url_for('login'))
+			user = users(
+				first_name=first_name,
+				last_name=last_name,
+				username=username,
+				password=hashed,
+				email=email,
+				avatar=avatar,
+				date_created=timestamp)
+			db.session.add(user)
+			db.session.commit()
+		except:
+			flash("There was an error creating your account.", "error")
+			return render_template("createaccount.html", form=form)
 
 		username = form.username.data
 		password = form.password.data
-		user = users.query.filter_by(username=username, password=password).first()
+		user = users.query.filter_by(username=username).first()
 
 		if user:
 			login_user(user)
@@ -241,7 +259,14 @@ def login():
 		username = form.username.data
 		password = form.password.data
 		# query user table for username and password
-		user = users.query.filter_by(username=username, password=password).first()
+		user = users.query.filter_by(username=username).first()
+
+		if not user:
+			flash("User not found.", "error")
+			return render_template("login.html", form=form)
+		if not bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+			flash("Incorrect password.", "error")
+			return render_template("login.html", form=form)
 
 		if user: # login user, get user id and store in cookie
 			login_user(user)
@@ -454,7 +479,7 @@ def friend_list():
 
 
 @app.route('/leaderboard/<leaderboard_type>')
-# @login_required
+@login_required
 def leaderboard(leaderboard_type):
 	sort = request.args.get("sort")
 	if not sort:

@@ -399,6 +399,7 @@ def add_friend():
 	if form.validate_on_submit():
 		friend_name = form.username.data
 		friend = users.query.filter_by(username=friend_name).first()
+		
 		if not friend:
 			flash("User does not exist.", "error")
 			return render_template('addfriend.html',
@@ -415,6 +416,7 @@ def add_friend():
 			query = f"SELECT friend_user_id FROM friends WHERE user_id = {uid}"
 			res = db.session.execute(query)
 			friend_id_list = []
+
 			for friend in res:
 				fid = friend['friend_user_id']
 				friend_id_list.append(fid)
@@ -422,7 +424,7 @@ def add_friend():
 			if friend_id in friend_id_list:
 				flash("Already friends with this user!", "error")
 				return render_template('addfriend.html',
-				form=form)
+					form=form)
 
 			query = f"""INSERT INTO friends (user_id, friend_user_id)
 				VALUES ({uid}, {friend_id})"""

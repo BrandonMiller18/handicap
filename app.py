@@ -485,25 +485,26 @@ def leaderboard(leaderboard_type):
 	if leaderboard_type == 'friends':
 		uid = int(request.cookies.get('uid'))
 		if sort == 'handicap':
-			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
-				WHERE friends.user_id = {uid}
-				ORDER BY handicaps.handicap;"""
+				WHERE friends.user_id = {uid} or users.id = {uid}
+				ORDER BY handicaps.handicap;
+				"""
 		elif sort == 'rounds':
-			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
-				WHERE friends.user_id = {uid}
+				WHERE friends.user_id = {uid} or users.id = {uid}
 				ORDER BY handicaps.total_rounds DESC;"""
 		elif sort == 'score':
-			query = f"""SELECT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
-				WHERE friends.user_id = {uid}
+				WHERE friends.user_id = {uid} or users.id = {uid}
 				ORDER BY handicaps.lowest_score;"""
 		else:
 			return render_template("leaderboard.html",

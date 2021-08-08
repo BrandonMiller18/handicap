@@ -329,9 +329,14 @@ def dashboard():
 
 	friend_list = friends.query.filter_by(user_id=user_id)
 	friend_count = 0
+	follower_list = friends.query.filter_by(friend_user_id=user_id)
+	follower_count = 0
 	
 	for friend in friend_list:
 		friend_count += 1
+
+	for friend in follower_list:
+		follower_count += 1
 
 
 	avatar = user.avatar
@@ -355,7 +360,8 @@ def dashboard():
 		lowest_score=lowest_score,
 		date=date,
 		rounds=rounds,
-		friend_count=friend_count)
+		friend_count=friend_count,
+		follower_count=follower_count)
 
 
 @app.route('/account/add-round', methods=["GET", "POST"])
@@ -462,19 +468,44 @@ def add_friend():
 		form=form)
 
 
-@app.route('/account/friends')
+@app.route('/account/friends/<list_type>')
 @login_required
-def friend_list():
+def friend_list(list_type):
 	uid = int(request.cookies.get('uid')) 
-	query = f"""SELECT users.username as friend_username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
-		FROM friends
-		JOIN users ON friends.friend_user_id=users.id
-		JOIN handicaps ON friends.friend_user_id=handicaps.user_id
-		WHERE friends.user_id = {uid}"""
-	friends = db.session.execute(query)
+
+	if list_type == 'following':
+		query = f"""SELECT users.username as friend_username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			FROM friends
+			JOIN users ON friends.friend_user_id=users.id
+			JOIN handicaps ON friends.friend_user_id=handicaps.user_id
+			WHERE friends.user_id = {uid}"""
+		friends = db.session.execute(query)
+
+	if list_type == 'followed_by':
+		query = f"""SELECT users.username as friend_username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			FROM friends
+			JOIN users ON friends.user_id=users.id
+			JOIN handicaps ON friends.user_id=handicaps.user_id
+			WHERE friends.friend_user_id = {uid}"""
+		friends = db.session.execute(query)
+
 
 	return render_template('friendslist.html',
-		friends=friends)
+		friends=friends,
+		list_type=list_type)
+
+
+@app.route('/account/friends/view-rounds/<username>')
+@login_required
+def view_friends_rounds(username):
+	friend = users.query.filter_by(username=username).first()
+	friend_uid = friend.id
+
+	rounds = get_rounds(db, friend_uid)
+
+	return render_template('friendrounds.html',
+		rounds=rounds,
+		username=username)
 
 
 @app.route('/leaderboard/<leaderboard_type>')

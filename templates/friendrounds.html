@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | {{username}}'s Rounds{% endblock %}
+{% set active_page = "friend_rounds" %}
+
+
+
+{% block content %}
+
+<div class="main leaderboard">
+	<div class="flex-container">
+		<div class="box rounds">
+			<h2>{{ username }}'s rounds.</h2>
+			{% if rounds %}
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Course</th>
+						<th class="hide-mobile">Rating</th>
+						<th class="hide-mobile">Slope</th>
+						<th>Score</th>
+						<th>Score Differential</th>
+						<th class="hide-mobile">Date</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+					{% for round in rounds %}
+					<tr>
+						<td>{{ round['course'] if round['course'] else 'Not Available' }}</td>
+						<td class="hide-mobile">{{ round['rating'] }}</td>
+						<td class="hide-mobile">{{ round['slope'] }}</td>
+						<td>{{ round['score'] }}</td>
+						<td>{{ round['score_differential'] }}</td>
+						<td class="hide-mobile">{{ round['timestamp'] }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% else %}
+			<div>
+				<p>No rounds played!</p>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

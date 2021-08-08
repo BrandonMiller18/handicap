@@ -20,8 +20,8 @@
 						<div class="column">
 							<p>Username: <span class="username">{{ username }}</span></p>
 							<p>Email: <span class="username">{{ email }}</span></p>
-							<p>Friends: <span class="username">{{ friend_count if friend_count else 0 }}</span></p>
-							<p><a class="fancy-link" href="{{ url_for('friend_list') }}">View Friends</a></p>
+							<p><a class="fancy-link" href="{{ url_for('friend_list', list_type='following') }}">Following:</a> {{ friend_count if friend_count else 0 }}</p>
+							<p><a class="fancy-link" href="{{ url_for('friend_list', list_type='followed_by') }}">Followed by:</a> {{ follower_count if follower_count else 0 }}</p>
 						</div>
 					</div>
 				</div>

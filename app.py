@@ -1,6 +1,10 @@
 import os
 from datetime import datetime
 from werkzeug.utils import secure_filename
+
+import io
+import boto3
+
 import bcrypt
 from flask import Flask, render_template, redirect, url_for, request, session, flash, make_response, abort
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +18,13 @@ from forms import *
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+
+#AWS STORAGE SETUP
+s3 = boto3.client('s3',
+					aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+					aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+					)
+S3_BUCKET="thegolfhandicap"
 
 db = SQLAlchemy(app)
 
@@ -205,8 +216,15 @@ def create_account():
 			# TODO - check image size and validate
 			file = request.files['avatar']
 			if file and allowed_file(file.filename):
-				filename = secure_filename(str(form.username.data)) # set filename to username
-				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+				filename = secure_filename(f"{form.username.data}_{file.filename}") # set filename to username
+				file.save(filename)
+				# upload file to amazon s3 bucket
+				s3.upload_file(
+					Bucket=S3_BUCKET,
+					Filename=filename,
+					Key=filename
+				)
+
 		else: # if user did not upload image, set image to default image
 			filename = 'default.png'
 

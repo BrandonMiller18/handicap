@@ -69,6 +69,19 @@ class editRound(FlaskForm):
 		validators=[Length(min=0, max=5, message='Zipcode must be 5 digits.')])
 
 
+class editAccount(FlaskForm):
+	first_name = StringField('First Name',
+		render_kw={"Placeholder": "First Name"})
+	last_name = StringField('Last Name',
+		render_kw={"Placeholder": "Last Name"})
+	username = StringField('Username',
+		render_kw={"Placeholder": "Username"},
+		validators=[DataRequired(message='Must enter username.')])
+	email = StringField('Email',
+		render_kw={"Placeholder": "Email", "type": "email"},
+		validators=[DataRequired(message='Must enter email.')])
+	avatar = FileField('Profile Picture:')
+
 class addFriend(FlaskForm):
 	username = StringField('Friend Name', validators=[DataRequired()],
 		render_kw={"Placeholder": "Friend's TGH Username"})

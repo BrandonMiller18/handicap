@@ -188,12 +188,11 @@ def individual_blog(slug):
 def create_account():
 	form = createAccount()
 	if current_user.is_authenticated:
+		# checks for logged in user.. if user is logged in, redirects to dashboard
 		flash("Already logged in!", "success")
 		return redirect(url_for('dashboard'))
 
 	elif form.validate_on_submit(): # valid form, POST
-		## CHECK FOR EXISTING USERS BEFORE DOING ANYTHING ELSE ##
-
 		first_name = form.first_name.data
 		last_name = form.last_name.data
 		username = form.username.data
@@ -204,10 +203,10 @@ def create_account():
 		user_with_username = users.query.filter_by(username=username).first()
 		user_with_email = users.query.filter_by(email=email).first()
 
-		if user_with_username:
+		if user_with_username: # check for existing username
 			flash("Username already taken.", "error")
 			return render_template("createaccount.html", form=form)
-		if user_with_email:
+		if user_with_email: # check for existing email
 			flash("User with this email already exists.", "error")
 			return render_template("createaccount.html", form=form)
 
@@ -224,6 +223,7 @@ def create_account():
 					Filename=filename,
 					Key=filename
 				)
+				os.remove(filename)
 
 		else: # if user did not upload image, set image to default image
 			filename = 'default.png'
@@ -381,6 +381,54 @@ def dashboard():
 		friend_count=friend_count,
 		follower_count=follower_count)
 
+
+@app.route('/account/edit-account', methods=["GET", "POST"])
+@login_required
+def edit_account():
+	form = editAccount()
+	uid = int(request.cookies.get('uid'))
+	this_user = users.query.filter_by(id=uid).first()
+
+	if uid != int(this_user.id):
+		return abort(403)
+
+	if form.validate_on_submit():
+		first_name = form.first_name.data
+		last_name = form.last_name.data
+		username = form.username.data
+		email = form.email.data
+
+		if request.files['avatar']: # if user submitted a profile image
+			# TODO - check image size and validate
+			file = request.files['avatar']
+			if file and allowed_file(file.filename):
+				filename = secure_filename(f"{form.username.data}_{file.filename}") # set filename to username
+				file.save(filename)
+				# upload file to amazon s3 bucket
+				s3.upload_file(
+					Bucket=S3_BUCKET,
+					Filename=filename,
+					Key=filename
+				)
+				os.remove(filename)
+			avatar = filename
+			this_user.avatar = avatar
+
+		this_user.first_name = first_name
+		this_user.last_name = last_name
+		this_user.username = username
+		this_user.email = email
+		
+		try:
+			db.session.commit()
+			flash("Account updated!", "success")
+			return redirect(url_for('dashboard'))
+		except:
+			flash("Unable to update information.", "error")
+
+	return render_template("editaccount.html",
+		form=form,
+		this_user=this_user)
 
 @app.route('/account/add-round', methods=["GET", "POST"])
 @login_required

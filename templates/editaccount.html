@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}The Golf Handicap | Edit Round{% endblock %}
+
+
+{% block content %}
+
+<div class="main">
+
+	<div class="form-wrapper">
+		<div class="form">
+			<h1>Edit Account.</h1>
+			<form class="" action="{{ url_for('edit_account') }}" method="POST" enctype="multipart/form-data">
+				{{form.csrf_token}}
+				<div class="input-wrap">
+					<strong>{{ form.first_name.label }}</strong>
+					{{ form.first_name(value=this_user.first_name) }}
+				</div>
+				<div class="input-wrap">
+					<strong>{{ form.last_name.label }}</strong>
+					{{ form.last_name(value=this_user.last_name) }}
+				</div>
+				<div class="input-wrap">
+					<strong>{{ form.username.label }}</strong>
+					{{ form.username(value=this_user.username) }}
+				</div>
+				<div class="input-wrap">
+					<strong>{{ form.email.label }}</strong>
+					{{ form.email(value=this_user.email) }}
+				</div>
+				<div class="input-wrap">
+					<strong>{{ form.avatar.label }}</strong>
+					{{ form.avatar }}
+				</div>
+				<div class="input-wrap">
+					<button type="submit">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</div>
+
+
+{% endblock %}
+	
+</body>
+</html>

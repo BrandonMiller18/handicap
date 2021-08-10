@@ -480,8 +480,7 @@ img.avatar {
 	width: 250px;
 	max-height: 200px;
 	margin: 1em;
-	border-radius: 15px;
-	box-shadow: 1px 0.5px 2px var(--secondary-color);
+	border-radius: 5px;
 }
 
 span.highlight-text {color: #ff6403; font-weight: bold;}

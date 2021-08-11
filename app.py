@@ -582,19 +582,19 @@ def leaderboard(leaderboard_type):
 		sort = 'handicap'
 	if leaderboard_type == 'all':
 		if sort == 'handicap':
-			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username, users.avatar
 				FROM handicaps
 				INNER JOIN users ON handicaps.user_id=users.id
 				WHERE handicaps.total_rounds > 0
 				ORDER BY handicap;"""
 		elif sort == 'rounds':
-			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username, users.avatar
 				FROM handicaps
 				INNER JOIN users ON handicaps.user_id=users.id
 				WHERE handicaps.total_rounds > 0
 				ORDER BY total_rounds DESC;"""
 		elif sort == 'score':
-			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username
+			query = """SELECT handicaps.user_id, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds, users.username, users.avatar
 				FROM handicaps
 				INNER JOIN users ON handicaps.user_id=users.id
 				WHERE handicaps.total_rounds > 0
@@ -606,7 +606,7 @@ def leaderboard(leaderboard_type):
 	if leaderboard_type == 'friends':
 		uid = int(request.cookies.get('uid'))
 		if sort == 'handicap':
-			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, users.avatar, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
@@ -614,14 +614,14 @@ def leaderboard(leaderboard_type):
 				ORDER BY handicaps.handicap;
 				"""
 		elif sort == 'rounds':
-			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, users.avatar, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id
 				WHERE friends.user_id = {uid} or users.id = {uid}
 				ORDER BY handicaps.total_rounds DESC;"""
 		elif sort == 'score':
-			query = f"""SELECT DISTINCT users.username, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
+			query = f"""SELECT DISTINCT users.username, users.avatar, handicaps.handicap, handicaps.lowest_score, handicaps.total_rounds
 				FROM friends
 				JOIN users ON friends.friend_user_id=users.id
 				JOIN handicaps ON friends.friend_user_id=handicaps.user_id

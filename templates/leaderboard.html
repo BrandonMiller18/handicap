@@ -39,6 +39,7 @@
 				<table class="table leaderboard">
 					<thead>
 						<tr>
+							<th></th>
 							<th>Username</th>
 							{% if sort == 'handicap' %}
 							<th>Handicap</th>
@@ -52,6 +53,9 @@
 					<tbody>
 						{% for user in leaderboard %}
 						<tr>
+							<td>
+								<img src="https://thegolfhandicap.s3.us-east-2.amazonaws.com/{{ user['avatar'] }}" style="max-height: 25px; max-width: 25px;">
+							</td>
 							<td>{{ user['username'] }}</td>
 							{% if sort == 'handicap' %}
 							<td>{{ user['handicap'] | round(1) }}</td>

@@ -477,7 +477,7 @@ footer .socials:hover {
 }
 
 img.avatar {
-	width: 250px;
+	max-width: 250px;
 	max-height: 200px;
 	margin: 1em;
 	border-radius: 5px;
@@ -535,7 +535,7 @@ td, th {
 	padding: 8px;
 	max-width: 250px;
 	color: #000;
-	text-align: center;
+	text-align: left;
 }
 
 td:first-child {
